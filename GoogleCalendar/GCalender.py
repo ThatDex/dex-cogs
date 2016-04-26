@@ -16,7 +16,13 @@ class GCalender:
         self.bot = bot
 
     @commands.command()
-    async def get_creds():
+    async def tenapps(self):
+        """Get the next 10 appointments"""
+
+
+        await self.bot.say("I can do stuff!")
+
+	def get_creds():
     """Gets valid user credentials from storage.
 
     If nothing has been stored, or if the stored credentials are invalid,
@@ -44,12 +50,7 @@ class GCalender:
         print('Storing credentials to ' + credential_path)
     return credentials
 
-    @commands.command()
-    async def mycom(self):
-        """This does stuff!"""
-
-        #Your code will go here
-        await self.bot.say("I can do stuff!")
-
 def setup(bot):
-    bot.add_cog(Mycog(bot))
+	get_creds()
+	n = GCalendar(bot)
+	bot.add_cog(n)
