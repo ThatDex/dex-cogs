@@ -69,7 +69,23 @@ class GCalender:
 	        print('Storing credentials to ' + credential_path)
 	    return credentials
 
+	def check_folders():
+		if not os.path.exists("data/GCalendar")
+			print("Creating data/GCalendar folder...")
+			os.makedirs("data/GCalendar")
+
+	def check_files():
+		app_name = {"app_name" : "Put your application name here!"}
+
+		f = "data/GCalendar/settings.json"
+		if not fileIO(f, "check"):
+			print("Creating settings.json")
+			print("Setup Google API and Application")
+			fileIO(f, "save", settings)
+
 def setup(bot):
+	check_folders()
+	check_files()
 	get_creds()
 	n = GCalendar(bot)
 	bot.add_cog(n)
