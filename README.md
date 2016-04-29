@@ -1,2 +1,2 @@
 # PyCalendar
-Google Calendar Plugin for RedBot
+Cogs made by Dex
