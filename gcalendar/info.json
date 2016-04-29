@@ -2,5 +2,5 @@
     "AUTHOR" : "Dex",
     "DESCRIPTION" : "Manage your google calendar from Discord!",
     "DISABLED" : false,
-    "NAME" : "GCalendar"
+    "NAME" : "gcalendar"
 }
