@@ -34,7 +34,7 @@ class gcalender:
 		Creates a Google Calendar API service object and outputs a list of the next
 		10 events on the user's calendar.
 		"""
-		credentials = get_credentials()
+		credentials = get_creds()
 		http = credentials.authorize(httplib2.Http())
 		service = discovery.build('calendar', 'v3', http=http)
 
@@ -49,9 +49,8 @@ class gcalender:
 			print('No upcoming events found.')
 		for event in events:
 			start = event['start'].get('dateTime', event['start'].get('date'))
-			print(start, event['summary'])
 
-			await self.bot.say("I can do stuff!")
+			await self.bot.say(start + " " + event['summary'])
 
 def get_creds():
 	"""Gets valid user credentials from storage.
@@ -99,5 +98,5 @@ def setup(bot):
 	check_folders()
 	check_files()
 	get_creds()
-	n = gcalendar(bot)
+	n = gcalender(bot)
 	bot.add_cog(n)
