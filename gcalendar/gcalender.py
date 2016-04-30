@@ -30,13 +30,11 @@ class gcalender:
 	def __init__(self, bot):
 		self.bot = bot
 		self.settings = fileIO("data/gcalendar/settings.json", "load")
-
+			
 	@commands.command(no_pm=True, pass_context=False)
-	async def eventstoday(self):
+	async def tenapps(self):
 		"""List events for today
 		"""
-
-		tomorrow = datetime.date.today() + datetime.timedelta(days=1)
 
 		credentials = get_creds()
 		http = credentials.authorize(httplib2.Http())
@@ -45,12 +43,62 @@ class gcalender:
 		now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
 		"""print('Getting the upcoming 10 events')"""
 		eventsResult = service.events().list(
-			calendarId='primary', timeMin=now, timeMax=now, maxResults=10, singleEvents=True,
+			calendarId='primary', timeMin=now, maxResults=10, singleEvents=True,
 			orderBy='startTime').execute()
 		events = eventsResult.get('items', [])
 
 		if not events:
 			print('No upcoming events found.')
+		for event in events:
+			start = event['start'].get('dateTime', event['start'].get('date'))
+
+			await self.bot.say(start + " " + event['summary'])
+			
+	@commands.command(no_pm=True, pass_context=False)
+	async def eventstoday(self):
+		"""List events for today
+		"""
+		todaydate = datetime.date.today()
+		today0h = str(todaydate) + "T00:00:00Z"
+		today23h = str(todaydate) +  "T23:59:59Z"
+
+		credentials = get_creds()
+		http = credentials.authorize(httplib2.Http())
+		service = discovery.build('calendar', 'v3', http=http)
+
+		"""print('Getting the upcoming 10 events')"""
+		eventsResult = service.events().list(
+			calendarId='primary', timeMin=today0h, timeMax=today23h, maxResults=20, singleEvents=True,
+			orderBy='startTime').execute()
+		events = eventsResult.get('items', [])
+
+		if not events:
+			await self.bot.say("No events found for today.")
+		for event in events:
+			start = event['start'].get('dateTime', event['start'].get('date'))
+
+			await self.bot.say(start + " " + event['summary'])
+			
+	@commands.command(no_pm=True, pass_context=False)
+	async def eventstomorrow(self):
+		"""List events for today
+		"""
+		tomorrowdate = datetime.date.today() + datetime.timedelta(days=1)
+		tomorrow0h = str(tomorrowdate) + "T00:00:00Z"
+		tomorrow23h = str(tomorrowdate) +  "T23:59:59Z"
+
+		credentials = get_creds()
+		http = credentials.authorize(httplib2.Http())
+		service = discovery.build('calendar', 'v3', http=http)
+
+		"""print('Getting the upcoming 10 events')"""
+		eventsResult = service.events().list(
+			calendarId='primary', timeMin=tomorrow0h, timeMax=tomorrow23h, maxResults=10, singleEvents=True,
+			orderBy='startTime').execute()
+		events = eventsResult.get('items', [])
+
+		if not events:
+			await self.bot.say("No events found for tomorrow.")
 		for event in events:
 			start = event['start'].get('dateTime', event['start'].get('date'))
 
