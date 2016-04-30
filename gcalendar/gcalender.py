@@ -16,9 +16,13 @@ try:
 except ImportError:
 	flags = None	
 
-SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
+
+"""If modifying these scopes, delete your previously saved credentials"""
+"""at ~/.credentials/calendar-python-quickstart.json"""
+
+SCOPES = 'https://www.googleapis.com/auth/calendar'
 CLIENT_SECRET_FILE = 'data/gcalendar/client_secret.json'
-APPLICATION_NAME = 'Google Calendar Test Function'
+APPLICATION_NAME = 'Google Calendar For Discord'
 
 class gcalender:
 	"""Connect your Google Calender with Discord!"""
@@ -28,20 +32,20 @@ class gcalender:
 		self.settings = fileIO("data/gcalendar/settings.json", "load")
 
 	@commands.command(no_pm=True, pass_context=False)
-	async def tenapps(self):
-		"""Shows basic usage of the Google Calendar API.
-
-		Creates a Google Calendar API service object and outputs a list of the next
-		10 events on the user's calendar.
+	async def eventstoday(self):
+		"""List events for today
 		"""
+
+		tomorrow = datetime.date.today() + datetime.timedelta(days=1)
+
 		credentials = get_creds()
 		http = credentials.authorize(httplib2.Http())
 		service = discovery.build('calendar', 'v3', http=http)
 
 		now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-		print('Getting the upcoming 10 events')
+		"""print('Getting the upcoming 10 events')"""
 		eventsResult = service.events().list(
-			calendarId='primary', timeMin=now, maxResults=10, singleEvents=True,
+			calendarId='primary', timeMin=now, timeMax=now, maxResults=10, singleEvents=True,
 			orderBy='startTime').execute()
 		events = eventsResult.get('items', [])
 
@@ -61,7 +65,6 @@ def get_creds():
 	Returns:
 		Credentials, the obtained credential.
 	"""
-	"""home_dir = os.path.expanduser('~')"""
 	credential_dir = os.path.join('data/GCalendar/creds', '.credentials')
 	if not os.path.exists(credential_dir):
 		os.makedirs(credential_dir)
@@ -85,7 +88,7 @@ def check_folders():
 		print("Creating data/GCalendar folder...")
 		os.makedirs("data/GCalendar")
 
-def check_files():
+def check_settings():
 	settings = {"app_name" : "Put your application name here!"}
 
 	f = "data/GCalendar/settings.json"
@@ -94,9 +97,14 @@ def check_files():
 		print("Setup Google API and Application")
 		fileIO(f, "save", settings)
 
+def check_client():
+	if not os.path.isfile('data/gcalendar/client_secret.json'):
+		print("You need to get an API key from: https://console.developers.google.com/start/api?id=calendar")
+		print("Then follow step 1 on this page and save client_secret in 'data/gcalender'")
+
 def setup(bot):
 	check_folders()
-	check_files()
+	check_settings()
 	get_creds()
 	n = gcalender(bot)
 	bot.add_cog(n)
