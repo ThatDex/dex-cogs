@@ -23,6 +23,7 @@ except ImportError:
 SCOPES = 'https://www.googleapis.com/auth/calendar'
 CLIENT_SECRET_FILE = 'data/gcalendar/client_secret.json'
 APPLICATION_NAME = 'Google Calendar For Discord'
+cal_id = 'primary'
 
 class gcalender:
 	"""Connect your Google Calender with Discord!"""
@@ -43,7 +44,7 @@ class gcalender:
 		now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
 		"""print('Getting the upcoming 10 events')"""
 		eventsResult = service.events().list(
-			calendarId='primary', timeMin=now, maxResults=10, singleEvents=True,
+			calendarId=cal_id, timeMin=now, maxResults=10, singleEvents=True,
 			orderBy='startTime').execute()
 		events = eventsResult.get('items', [])
 
@@ -68,7 +69,7 @@ class gcalender:
 
 		"""print('Getting the upcoming 10 events')"""
 		eventsResult = service.events().list(
-			calendarId='primary', timeMin=today0h, timeMax=today23h, maxResults=20, singleEvents=True,
+			calendarId=cal_id, timeMin=today0h, timeMax=today23h, maxResults=20, singleEvents=True,
 			orderBy='startTime').execute()
 		events = eventsResult.get('items', [])
 
@@ -93,7 +94,7 @@ class gcalender:
 
 		"""print('Getting the upcoming 10 events')"""
 		eventsResult = service.events().list(
-			calendarId='primary', timeMin=tomorrow0h, timeMax=tomorrow23h, maxResults=10, singleEvents=True,
+			calendarId=cal_id, timeMin=tomorrow0h, timeMax=tomorrow23h, maxResults=10, singleEvents=True,
 			orderBy='startTime').execute()
 		events = eventsResult.get('items', [])
 
@@ -117,6 +118,21 @@ class gcalender:
 			page_token = calendar_list.get('nextPageToken')
 			if not page_token:
 				break
+
+	@commands.command(pass_context=False, no_pm=True)
+	async def setcal(self, cal_set)
+		await self.bot.say("Current calendar is: " + cal_id)
+		page_token = None
+		while True:
+			credentials = get_creds()
+			http = credentials.authorize(httplib2.Http())
+			service = discovery.build('calendar', 'v3', http=http)
+			calendar_list = service.calendarList().list(pageToken=page_token).execute()
+			for calendar_list_entry in calendar_list['items']:
+				await self.bot.say("Calendar Name: " + calendar_list_entry['summary'], + " Cal ID: " + calendar_list_entry['id']) 
+			page_token = calendar_list.get('nextPageToken')
+			if not page_token:
+				break		
 
 def get_creds():
 	"""Gets valid user credentials from storage.
