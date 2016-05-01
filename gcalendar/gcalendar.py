@@ -113,7 +113,7 @@ class gcalender:
 			service = discovery.build('calendar', 'v3', http=http)
 			calendar_list = service.calendarList().list(pageToken=page_token).execute()
 			for calendar_list_entry in calendar_list['items']:
-				self.bot.say(calendar_list_entry['summary']) 
+				await self.bot.say(calendar_list_entry['summary']) 
 			page_token = calendar_list.get('nextPageToken')
 			if not page_token:
 				break
