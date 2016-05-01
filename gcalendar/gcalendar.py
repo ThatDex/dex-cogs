@@ -147,7 +147,7 @@ class gcalender:
 	@commands.command(pass_context=True, no_pm=True)
 	async def setcal(self):
 		await self.bot.say("Current calendar is: " + cal_id)
-		if 'primary' is not in cal_id.content.lower():
+		if "primary" not in cal_id.content.lower():
 			await self.bot.say("Primary is the defualt calendar on the account.")
 		
 		await self.bot.say("Do you want to change the active calendar? (yes/no)")
