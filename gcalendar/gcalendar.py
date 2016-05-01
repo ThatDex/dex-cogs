@@ -147,7 +147,7 @@ class gcalender:
 	@commands.command(pass_context=True, no_pm=True)
 	async def setcal(self):
 		await self.bot.say("Current calendar is: " + cal_id)
-		if cal_id = 'primary' or 'Primary':
+		if 'primary' is not in cal_id.content.lower():
 			await self.bot.say("Primary is the defualt calendar on the account.")
 		
 		await self.bot.say("Do you want to change the active calendar? (yes/no)")
@@ -177,9 +177,9 @@ class gcalender:
 				page_token = calendar_list.get('nextPageToken')
 				if not page_token:
 					break
-		await self.bot.say("Please type the ID from one of the calendars listed.")
+		"""await self.bot.say("Please type the ID from one of the calendars listed.")
 		idanswer = await self.bot.wait_for_message(timeout=15, author=ctx.message.author)
-
+		"""
 
 def get_creds():
 	"""Gets valid user credentials from storage.
