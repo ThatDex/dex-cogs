@@ -31,7 +31,7 @@ class gcalender:
 		self.bot = bot
 		self.settings = fileIO("data/gcalendar/settings.json", "load")
 			
-	@commands.command(no_pm=True, pass_context=False)
+	@commands.command()
 	async def tenapps(self):
 		"""List events for today
 		"""
@@ -54,7 +54,7 @@ class gcalender:
 
 			await self.bot.say(start + " " + event['summary'])
 			
-	@commands.command(no_pm=True, pass_context=False)
+	@commands.command()
 	async def eventstoday(self):
 		"""List events for today
 		"""
@@ -79,7 +79,7 @@ class gcalender:
 
 			await self.bot.say(start + " " + event['summary'])
 			
-	@commands.command(no_pm=True, pass_context=False)
+	@commands.command()
 	async def eventstomorrow(self):
 		"""List events for today
 		"""
@@ -103,6 +103,17 @@ class gcalender:
 			start = event['start'].get('dateTime', event['start'].get('date'))
 
 			await self.bot.say(start + " " + event['summary'])
+
+	@commands.command()
+	async def listcals(self):
+		page_token = None
+		while True:
+		  calendar_list = service.calendarList().list(pageToken=page_token).execute()
+		  for calendar_list_entry in calendar_list['items']:
+		    self.bot.say(calendar_list_entry['summary']) 
+		  page_token = calendar_list.get('nextPageToken')
+		  if not page_token:
+		    break
 
 def get_creds():
 	"""Gets valid user credentials from storage.
