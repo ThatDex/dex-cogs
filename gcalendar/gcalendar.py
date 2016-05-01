@@ -120,7 +120,7 @@ class gcalender:
 				break
 
 	@commands.command(pass_context=False, no_pm=True)
-	async def setcal(self, cal_set)
+	async def setcal(self, cal_set):
 		await self.bot.say("Current calendar is: " + cal_id)
 		page_token = None
 		while True:
