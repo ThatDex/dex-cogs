@@ -145,7 +145,7 @@ class gcalender:
 				break
 
 	@commands.command(pass_context=True, no_pm=True)
-	async def setcal(self)
+	async def setcal(self):
 		await self.bot.say("Current calendar is: " + cal_id)
 		if cal_id = 'primary' or 'Primary':
 			await self.bot.say("Primary is the defualt calendar on the account.")
