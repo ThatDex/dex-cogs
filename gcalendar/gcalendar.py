@@ -108,7 +108,7 @@ class gcalender:
 	async def listcals(self):
 		page_token = None
 		while True:
-			credentials = get_credentials()
+			credentials = get_creds()
 			http = credentials.authorize(httplib2.Http())
 			service = discovery.build('calendar', 'v3', http=http)
 			calendar_list = service.calendarList().list(pageToken=page_token).execute()
