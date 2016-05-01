@@ -162,21 +162,21 @@ class gcalender:
 		
 		await self.bot.say("Printing list of available calendars and thier IDs...")
 		page_token = None
-			while True:
-				credentials = get_creds()
-				http = credentials.authorize(httplib2.Http())
-				service = discovery.build('calendar', 'v3', http=http)
-				calendar_list = service.calendarList().list(pageToken=page_token).execute()
-				for calendar_list_entry in calendar_list['items']:
-					cal_names = calendar_list_entry['summary']
-					cal_ids = calendar_list_entry['id']
-					cal_perms = calendar_list_entry['accessRole']
-					await self.bot.say("Calendar Name: " + str(cal_names) + 
-						" Cal ID: " + str(cal_ids) + " Permission Level: " + str(cal_perms))
+		while True:
+			credentials = get_creds()
+			http = credentials.authorize(httplib2.Http())
+			service = discovery.build('calendar', 'v3', http=http)
+			calendar_list = service.calendarList().list(pageToken=page_token).execute()
+			for calendar_list_entry in calendar_list['items']:
+				cal_names = calendar_list_entry['summary']
+				cal_ids = calendar_list_entry['id']
+				cal_perms = calendar_list_entry['accessRole']
+				await self.bot.say("Calendar Name: " + str(cal_names) + 
+					" Cal ID: " + str(cal_ids) + " Permission Level: " + str(cal_perms))
 
-				page_token = calendar_list.get('nextPageToken')
-				if not page_token:
-					break
+			page_token = calendar_list.get('nextPageToken')
+			if not page_token:
+				break
 		"""await self.bot.say("Please type the ID from one of the calendars listed.")
 		idanswer = await self.bot.wait_for_message(timeout=15, author=ctx.message.author)
 		"""
