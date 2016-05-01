@@ -131,7 +131,7 @@ class gcalender:
 			for calendar_list_entry in calendar_list['items']:
 				cal_names = calendar_list_entry['summary']
 				cal_ids = calendar_list_entry['id']
-				await self.bot.say("Calendar Name: " + str(cal_names), + " Cal ID: " + str(cal_names))
+				await self.bot.say("Calendar Name: " + str(cal_names) + " Cal ID: " + str(cal_names))
 			page_token = calendar_list.get('nextPageToken')
 			if not page_token:
 				break		
