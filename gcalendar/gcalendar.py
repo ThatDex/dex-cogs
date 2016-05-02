@@ -19,11 +19,10 @@ except ImportError:
 
 """If modifying these scopes, delete your previously saved credentials"""
 """at ~/.credentials/calendar-python-quickstart.json"""
-
 SCOPES = 'https://www.googleapis.com/auth/calendar'
 CLIENT_SECRET_FILE = 'data/gcalendar/client_secret.json'
 APPLICATION_NAME = 'Google Calendar For Discord'
-cal_id = 'primary'
+cal_id = 'Primary'
 
 class gcalender:
 	"""Connect your Google Calender with Discord!"""
@@ -31,7 +30,7 @@ class gcalender:
 	def __init__(self, bot):
 		self.bot = bot
 		self.settings = fileIO("data/gcalendar/settings.json", "load")
-			
+
 	@commands.command()
 	async def tenapps(self):
 		"""List events for today
@@ -42,43 +41,21 @@ class gcalender:
 		service = discovery.build('calendar', 'v3', http=http)
 
 		now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-		"""print('Getting the upcoming 10 events')"""
 		eventsResult = service.events().list(
 			calendarId=cal_id, timeMin=now, maxResults=10, singleEvents=True,
 			orderBy='startTime').execute()
 		events = eventsResult.get('items', [])
-
-		if not events:
-			await self.bot.say("No upcoming events found.")
-		for event in events:
-			start = event['start'].get('dateTime', event['start'].get('date'))
-
-			await self.bot.say(start + " " + event['summary'])
-			
-	@commands.command()
-	async def tenappslist(self):
-		"""List events for today
-		"""
-
-		credentials = get_creds()
-		http = credentials.authorize(httplib2.Http())
-		service = discovery.build('calendar', 'v3', http=http)
-
-		now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-		eventsResult = service.events().list(
-			calendarId=cal_id, timeMin=now, maxResults=10, singleEvents=True,
-			orderBy='startTime').execute()
-		events = eventsResult.get('items', [])
-
+		eventList = []
+		
 		if not events:
 			print('No upcoming events found.')
-		eventList = []
+			
 		for event in events:
 			start = event['start'].get('dateTime', event['start'].get('date'))
 			ev_summary = event['summary']
 			eventList.append(start + " " + ev_summary)
 
-			await self.bot.say(eventList.join("\n"))
+		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
 						
 	@commands.command()
 	async def eventstoday(self):
@@ -92,22 +69,24 @@ class gcalender:
 		http = credentials.authorize(httplib2.Http())
 		service = discovery.build('calendar', 'v3', http=http)
 
-		"""print('Getting the upcoming 10 events')"""
 		eventsResult = service.events().list(
 			calendarId=cal_id, timeMin=today0h, timeMax=today23h, maxResults=20, singleEvents=True,
 			orderBy='startTime').execute()
 		events = eventsResult.get('items', [])
-
+		eventList = []
+		
 		if not events:
 			await self.bot.say("No events found for today.")
 		for event in events:
 			start = event['start'].get('dateTime', event['start'].get('date'))
+			ev_summary = event['summary']
+			eventList.append(start + " " + ev_summary)
 
-			await self.bot.say(start + " " + event['summary'])
+		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
 			
 	@commands.command()
 	async def eventstomorrow(self):
-		"""List events for today
+		"""List events for tomorrow
 		"""
 		tomorrowdate = datetime.date.today() + datetime.timedelta(days=1)
 		tomorrow0h = str(tomorrowdate) + "T00:00:00Z"
@@ -117,69 +96,85 @@ class gcalender:
 		http = credentials.authorize(httplib2.Http())
 		service = discovery.build('calendar', 'v3', http=http)
 
-		"""print('Getting the upcoming 10 events')"""
 		eventsResult = service.events().list(
 			calendarId=cal_id, timeMin=tomorrow0h, timeMax=tomorrow23h, maxResults=10, singleEvents=True,
 			orderBy='startTime').execute()
 		events = eventsResult.get('items', [])
-
+		eventList = []
+		
 		if not events:
 			await self.bot.say("No events found for tomorrow.")
 		for event in events:
 			start = event['start'].get('dateTime', event['start'].get('date'))
+			ev_summary = event['summary']
+			eventList.append(start + " " + ev_summary)
 
-			await self.bot.say(start + " " + event['summary'])
+		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
 
 	@commands.command()
 	async def listcals(self):
+		"""Show active calendar and available calendars
+		"""
+
+		await self.bot.say("The active calendar is: " + cal_id + ".")
+		await self.bot.say("Printing list of available calendars and thier IDs...")		
 		page_token = None
 		while True:
 			credentials = get_creds()
 			http = credentials.authorize(httplib2.Http())
 			service = discovery.build('calendar', 'v3', http=http)
 			calendar_list = service.calendarList().list(pageToken=page_token).execute()
+			calList = []
+			calIDList = []
 			for calendar_list_entry in calendar_list['items']:
-				await self.bot.say(calendar_list_entry['summary']) 
+				cal_names = calendar_list_entry['summary']
+				cal_ids = calendar_list_entry['id']
+				cal_perms = calendar_list_entry['accessRole']
+				calList.append("Calendar Name: " + str(cal_names) + "\n" + 
+					"Calendar ID: " + str(cal_ids) + "\n" + "Permission Level: " + str(cal_perms) + "\n")
+				calIDList.append(str(cal_ids))
+				
+			await self.bot.say("```" + "\n" + "\n".join(calList) + "\n" + "```")
+			await self.bot.say("```" + "\n" + "Use [p]setcal 'Calendar ID' to change the active calendar." + "\n" + "```")
+					
 			page_token = calendar_list.get('nextPageToken')
 			if not page_token:
 				break
 
 	@commands.command(pass_context=True, no_pm=True)
-	async def setcal(self):
-		await self.bot.say("Current calendar is: " + cal_id)
-		if "primary" not in cal_id.content.lower():
-			await self.bot.say("Primary is the defualt calendar on the account.")
+	async def setcal(self, ctx, calendar_ID):
+		global cal_id
 		
-		await self.bot.say("Do you want to change the active calendar? (yes/no)")
-		
-		answer = await self.bot.wait_for_message(timeout=15, author=ctx.message.author)
-		if answer is None:
-			await self.bot.say("No changes made to active calendar.")
-			return
-		elif "yes" not in answer.content.lower():
-			await self.bot.say("No changes made to active calendar.")
-			return
-		
-		await self.bot.say("Printing list of available calendars and thier IDs...")
 		page_token = None
 		while True:
 			credentials = get_creds()
 			http = credentials.authorize(httplib2.Http())
 			service = discovery.build('calendar', 'v3', http=http)
 			calendar_list = service.calendarList().list(pageToken=page_token).execute()
+			calIDList = []
 			for calendar_list_entry in calendar_list['items']:
-				cal_names = calendar_list_entry['summary']
 				cal_ids = calendar_list_entry['id']
-				cal_perms = calendar_list_entry['accessRole']
-				await self.bot.say("Calendar Name: " + str(cal_names) + 
-					" Cal ID: " + str(cal_ids) + " Permission Level: " + str(cal_perms))
-
+				calIDList.append(str(cal_ids))
 			page_token = calendar_list.get('nextPageToken')
 			if not page_token:
 				break
-		"""await self.bot.say("Please type the ID from one of the calendars listed.")
-		idanswer = await self.bot.wait_for_message(timeout=15, author=ctx.message.author)
-		"""
+		
+		if calendar_ID not in calIDList:
+			await self.bot.say("That ID doesn't match any you have access to.")
+			return
+		elif calendar_ID in calIDList:
+			await self.bot.say("Do you want to change the active calendar to '" + str(calendar_ID) + "'? (yes/no)")
+			answer = await self.bot.wait_for_message(timeout=15, author=ctx.message.author)
+			
+			if answer is None:
+				await self.bot.say("No changes made to active calendar.")
+				return
+			elif "yes" not in answer.content.lower():
+				await self.bot.say("No changes made to active calendar.")
+				return
+				
+			cal_id = calendar_ID	
+			await self.bot.say("Active calendar is now set to: " + str(cal_id))
 
 def get_creds():
 	"""Gets valid user credentials from storage.
