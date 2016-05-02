@@ -22,7 +22,7 @@ except ImportError:
 SCOPES = 'https://www.googleapis.com/auth/calendar'
 CLIENT_SECRET_FILE = 'data/gcalendar/client_secret.json'
 APPLICATION_NAME = 'Google Calendar For Discord'
-cal_id = 'Primary'
+cal_id = 'primary'
 
 class gcalender:
 	"""Connect your Google Calender with Discord!"""
