@@ -31,7 +31,7 @@ class gcalender:
 		self.bot = bot
 		self.settings = fileIO("data/gcalendar/settings.json", "load")
 
-	def _ten_apps(self):
+	async def _ten_apps(self):
 		"""List events for today
 		"""
 
