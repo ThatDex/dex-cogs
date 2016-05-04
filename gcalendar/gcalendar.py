@@ -53,11 +53,11 @@ class gcalender:
 			eventList.append(start + " " + ev_summary)
 
 	@commands.group(no_pm=True, pass_context=True)
-    @checks.mod_or_permissions(manage_messages=True)
-    async def scheduler(self, ctx):
-        if ctx.invoked_subcommand is None:
-            await self.bot.say("Error")
-            return
+	@checks.mod_or_permissions(manage_messages=True)
+	async def scheduler(self, ctx):
+		if ctx.invoked_subcommand is None:
+			await self.bot.say("Error")
+			return
 
 	@gcalendar.command()
 	async def _gcalendar_tenapps(self):
