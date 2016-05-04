@@ -29,6 +29,35 @@ class gcalender:
 		self.bot = bot
 		self.settings = fileIO("data/gcalendar/settings.json", "load")
 
+	def _ten_apps(self):
+		"""List events for today
+		"""
+
+		credentials = get_creds()
+		http = credentials.authorize(httplib2.Http())
+		service = discovery.build('calendar', 'v3', http=http)
+		now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+		
+		eventsResult = service.events().list(
+			calendarId=self.settings['cal_id'], timeMin=now, maxResults=10, singleEvents=True,
+			orderBy='startTime').execute()
+		events = eventsResult.get('items', [])
+		eventList = []
+		
+		if not events:
+			self.bot.say("No upcoming events found.")
+			
+		for event in events:
+			start = event['start'].get('dateTime', event['start'].get('date'))
+			ev_summary = event['summary']
+			eventList.append(start + " " + ev_summary)
+
+	@gcalendar.command()
+	async def _gcalendar_tenapps(self):
+	
+		await self.bot._gcalendar_ten_apps(self)
+		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
+
 	@commands.command()
 	async def tenapps(self):
 		"""List events for today
