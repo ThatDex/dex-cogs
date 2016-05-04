@@ -6,6 +6,8 @@ from apiclient import discovery
 import httplib2
 import oauth2client
 import json
+from cogs.utils import checks
+from cogs.utils.dataIO import fileIO
 from oauth2client import client
 from oauth2client import tools
 from .utils.dataIO import fileIO
