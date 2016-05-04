@@ -52,9 +52,13 @@ class gcalender:
 			ev_summary = event['summary']
 			eventList.append(start + " " + ev_summary)
 
+	@commands.group(no_pm=True, pass_context=True)
+    @checks.mod_or_permissions(manage_messages=True)
+    async def scheduler(self, ctx):
+
 	@gcalendar.command()
 	async def _gcalendar_tenapps(self):
-	
+
 		await self.bot._gcalendar_ten_apps(self)
 		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
 
