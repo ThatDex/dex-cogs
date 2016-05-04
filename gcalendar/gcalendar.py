@@ -31,9 +31,7 @@ class gcalender:
 		self.bot = bot
 		self.settings = fileIO("data/gcalendar/settings.json", "load")
 
-	async def _ten_apps(self):
-		"""List the next 10 events
-		"""
+	async def ten_apps(self):
 
 		credentials = get_creds()
 		http = credentials.authorize(httplib2.Http())
@@ -56,46 +54,7 @@ class gcalender:
 
 		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
 
-	@commands.group(no_pm=True, pass_context=True)
-	@checks.mod_or_permissions(manage_messages=True)
-	async def gcalendar(self, ctx):
-		if ctx.invoked_subcommand is None:
-			await self.bot.say("Error")
-			return
-
-	@gcalendar.command(pass_context=True, name="tenapps")
-	async def _gcalendar_tenapps(self):
-
-		await self._ten_apps()
-
-	@commands.command()
-	async def tenapps2(self):
-		"""List events for today
-		"""
-
-		credentials = get_creds()
-		http = credentials.authorize(httplib2.Http())
-		service = discovery.build('calendar', 'v3', http=http)
-		now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-		
-		eventsResult = service.events().list(
-			calendarId=self.settings['cal_id'], timeMin=now, maxResults=10, singleEvents=True,
-			orderBy='startTime').execute()
-		events = eventsResult.get('items', [])
-		eventList = []
-		
-		if not events:
-			self.bot.say("No upcoming events found.")
-			
-		for event in events:
-			start = event['start'].get('dateTime', event['start'].get('date'))
-			ev_summary = event['summary']
-			eventList.append(start + " " + ev_summary)
-
-		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
-						
-	@commands.command()
-	async def eventstoday(self):
+	async def events_today(self):
 		"""List events for today
 		"""
 
@@ -121,9 +80,8 @@ class gcalender:
 			eventList.append(start + " " + ev_summary)
 
 		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
-			
-	@commands.command()
-	async def eventstomorrow(self):
+
+	async def events_tomorrow(self):
 		"""List events for tomorrow
 		"""
 
@@ -150,8 +108,7 @@ class gcalender:
 
 		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
 
-	@commands.command()
-	async def listcals(self):
+	async def list_cals(self):
 		"""Show active calendar and available calendars
 		"""
 
@@ -181,8 +138,7 @@ class gcalender:
 			if not page_token:
 				break
 
-	@commands.command(pass_context=True, no_pm=True)
-	async def setcal(self, ctx, calendar_ID):
+	async def set_cal(ctx, calendar_ID):
 		"""Change the active calendar. Get the ID from [p]listcals
 		"""
 
@@ -221,6 +177,38 @@ class gcalender:
 			self.settings['cal_id'] = calendar_ID
 			fileIO("data/gcalendar/settings.json", "save", self.settings)
 			await self.bot.say("Active calendar is now set to: " + self.settings['cal_id'])
+
+	@commands.group(no_pm=True, pass_context=True)
+	@checks.mod_or_permissions(manage_messages=True)
+	async def gcalendar(self, ctx):
+		if ctx.invoked_subcommand is None:
+			await self.bot.say("Error")
+			return
+
+	@gcalendar.command(pass_context=True, name="tenapps")
+	async def gcalendar_tenapps(self):
+
+		await self.ten_apps()
+						
+	@gcalendar.command(pass_context=True, name="eventstoday")
+	async def gcalendar_eventstoday(self):
+
+		await self.events_today()
+
+	@gcalendar.command(pass_context=True, name="eventstomorrow")
+	async def gcalendar_eventstomorrow(self):
+
+		await self.events_tomorrow()
+
+	@gcalendar.command(pass_context=True, name="listcals")
+	async def gcalendar_listcals(self):
+
+		await self.list_cals()
+
+	@commands.command(pass_context=True, no_pm=True, name="setcal")
+	async def gcalendar_setcal(self, ctx, calendar_ID):
+
+		await self.setcal(ctx, calendar_ID)
 
 def get_creds():
 	"""Gets valid user credentials from storage.
