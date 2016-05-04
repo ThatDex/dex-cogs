@@ -56,7 +56,7 @@ class gcalender:
 
 	@commands.group(no_pm=True, pass_context=True)
 	@checks.mod_or_permissions(manage_messages=True)
-	async def scheduler(self, ctx):
+	async def gcalendar(self, ctx):
 		if ctx.invoked_subcommand is None:
 			await self.bot.say("Error")
 			return
