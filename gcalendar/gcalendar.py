@@ -208,7 +208,7 @@ class gcalender:
 	@commands.command(pass_context=True, no_pm=True, name="setcal")
 	async def gcalendar_setcal(self, ctx, calendar_ID):
 
-		await self.setcal(ctx, calendar_ID)
+		await self.set_cal(ctx, calendar_ID)
 
 def get_creds():
 	"""Gets valid user credentials from storage.
