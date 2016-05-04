@@ -30,7 +30,7 @@ class gcalender:
 	def __init__(self, bot):
 		self.bot = bot
 		self.settings = fileIO("data/gcalendar/settings.json", "load")
-		
+
 	async def ten_apps(self):
 
 		credentials = get_creds()
@@ -138,7 +138,7 @@ class gcalender:
 			if not page_token:
 				break
 
-	async def set_cal(ctx, calendar_ID):
+	async def set_cal(self, ctx, calendar_ID):
 		"""Change the active calendar. Get the ID from [p]listcals
 		"""
 
@@ -206,7 +206,7 @@ class gcalender:
 		await self.list_cals()
 
 	@gcalendar.command(pass_context=True, no_pm=True, name="setcal")
-	async def gcalendar_setcal(self, ctx, calendar_ID):
+	async def gcalendar_setcal(ctx, calendar_ID):
 
 		await self.set_cal(self, ctx, calendar_ID)
 
