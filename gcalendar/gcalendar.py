@@ -205,7 +205,7 @@ class gcalender:
 
 		await self.list_cals()
 
-	@commands.command(pass_context=True, no_pm=True, name="setcal")
+	@gcalendar.command(pass_context=True, no_pm=True, name="setcal")
 	async def gcalendar_setcal(self, ctx, calendar_ID):
 
 		await self.set_cal(ctx, calendar_ID)
