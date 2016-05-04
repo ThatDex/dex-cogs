@@ -47,12 +47,14 @@ class gcalender:
 		eventList = []
 		
 		if not events:
-			self.bot.say("No upcoming events found.")
+			await self.bot.say("No upcoming events found.")
 			
 		for event in events:
 			start = event['start'].get('dateTime', event['start'].get('date'))
 			ev_summary = event['summary']
 			eventList.append(start + " " + ev_summary)
+
+			await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
 
 	@commands.group(no_pm=True, pass_context=True)
 	@checks.mod_or_permissions(manage_messages=True)
@@ -65,7 +67,6 @@ class gcalender:
 	async def _gcalendar_tenapps(self):
 
 		await self._ten_apps()
-		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
 
 	@commands.command()
 	async def tenapps2(self):
