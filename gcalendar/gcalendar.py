@@ -54,7 +54,7 @@ class gcalender:
 			ev_summary = event['summary']
 			eventList.append(start + " " + ev_summary)
 
-			await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
+		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
 
 	@commands.group(no_pm=True, pass_context=True)
 	@checks.mod_or_permissions(manage_messages=True)
