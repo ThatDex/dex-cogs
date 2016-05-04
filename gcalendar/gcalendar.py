@@ -21,8 +21,6 @@ except ImportError:
 
 SCOPES = 'https://www.googleapis.com/auth/calendar'
 CLIENT_SECRET_FILE = 'data/gcalendar/client_secret.json'
-APPLICATION_NAME = 'Google Calendar For Discord'
-cal_id = 'primary'
 
 class gcalender:
 	"""Connect your Google Calender with Discord!"""
@@ -42,7 +40,7 @@ class gcalender:
 		now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
 		
 		eventsResult = service.events().list(
-			calendarId=cal_id, timeMin=now, maxResults=10, singleEvents=True,
+			calendarId=self.settings['cal_id'], timeMin=now, maxResults=10, singleEvents=True,
 			orderBy='startTime').execute()
 		events = eventsResult.get('items', [])
 		eventList = []
@@ -70,7 +68,7 @@ class gcalender:
 		service = discovery.build('calendar', 'v3', http=http)
 
 		eventsResult = service.events().list(
-			calendarId=cal_id, timeMin=today0h, timeMax=today23h, maxResults=20, singleEvents=True,
+			calendarId=self.settings['cal_id'], timeMin=today0h, timeMax=today23h, maxResults=20, singleEvents=True,
 			orderBy='startTime').execute()
 		events = eventsResult.get('items', [])
 		eventList = []
@@ -98,7 +96,7 @@ class gcalender:
 		service = discovery.build('calendar', 'v3', http=http)
 
 		eventsResult = service.events().list(
-			calendarId=cal_id, timeMin=tomorrow0h, timeMax=tomorrow23h, maxResults=10, singleEvents=True,
+			calendarId=self.settings['cal_id'], timeMin=tomorrow0h, timeMax=tomorrow23h, maxResults=10, singleEvents=True,
 			orderBy='startTime').execute()
 		events = eventsResult.get('items', [])
 		eventList = []
@@ -118,7 +116,7 @@ class gcalender:
 		"""Show active calendar and available calendars
 		"""
 
-		await self.bot.say("The active calendar is: " + cal_id + ".")
+		await self.bot.say("The active calendar is: " + self.settings['cal_id'] + ".")
 		await self.bot.say("Printing list of available calendars and thier IDs...")		
 		page_token = None
 
@@ -146,10 +144,9 @@ class gcalender:
 
 	@commands.command(pass_context=True, no_pm=True)
 	async def setcal(self, ctx, calendar_ID):
-	"""Change the active calendar. Get the ID from [p]listcals
-	"""
+		"""Change the active calendar. Get the ID from [p]listcals
+		"""
 
-		global cal_id	
 		page_token = None
 
 		while True:
@@ -177,12 +174,13 @@ class gcalender:
 			if answer is None:
 				await self.bot.say("No changes made to active calendar.")
 				return
-				
+
 			elif "yes" not in answer.content.lower():
 				await self.bot.say("No changes made to active calendar.")
 				return
 				
-			cal_id = calendar_ID	
+			self.settings['cal_id'] = calendar_ID
+			fileIO("data/gcalender/settings.json", "save", self.settings)
 			await self.bot.say("Active calendar is now set to: " + str(cal_id))
 
 def get_creds():
@@ -205,7 +203,7 @@ def get_creds():
 	credentials = store.get()
 	if not credentials or credentials.invalid:
 		flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
-		flow.user_agent = APPLICATION_NAME
+		flow.user_agent = self.settings['app_name']
 		if flags:
 			credentials = tools.run_flow(flow, store, flags)
 		else: # Needed only for compatibility with Python 2.6
@@ -219,7 +217,7 @@ def check_folders():
 		os.makedirs("data/GCalendar")
 
 def check_settings():
-	settings = {"app_name" : "Put your application name here!"}
+	settings = {"app_name" : "Put your application name here!", "cal_id" : "primary"}
 
 	f = "data/GCalendar/settings.json"
 	if not fileIO(f, "check"):
