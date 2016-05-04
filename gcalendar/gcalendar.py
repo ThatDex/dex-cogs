@@ -64,7 +64,7 @@ class gcalender:
 	@gcalendar.command(pass_context=True, name="tenapps")
 	async def _gcalendar_tenapps(self):
 
-		await self._ten_apps(self)
+		await self._ten_apps()
 		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
 
 	@commands.command()
