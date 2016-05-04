@@ -31,7 +31,7 @@ class gcalender:
 		self.bot = bot
 		self.settings = fileIO("data/gcalendar/settings.json", "load")
 
-	async def _ten_apps(self, ctx):
+	async def _ten_apps(self):
 		"""List the next 10 events
 		"""
 
@@ -62,9 +62,9 @@ class gcalender:
 			return
 
 	@gcalendar.command(pass_context=True, name="tenapps")
-	async def _gcalendar_tenapps(self, ctx):
+	async def _gcalendar_tenapps(self):
 
-		await self._ten_apps(self,ctx)
+		await self._ten_apps(self)
 		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
 
 	@commands.command()
