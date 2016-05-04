@@ -30,8 +30,7 @@ class gcalender:
 	def __init__(self, bot):
 		self.bot = bot
 		self.settings = fileIO("data/gcalendar/settings.json", "load")
-
-"""---------------------------------Event Listing---------------------------------"""
+		
 	async def ten_apps(self):
 
 		credentials = get_creds()
