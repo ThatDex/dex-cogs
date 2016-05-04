@@ -14,15 +14,13 @@ try:
 	import argparse
 	flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
 except ImportError:
-	flags = None	
-
+	flags = None
 
 """If modifying these scopes, delete your previously saved credentials"""
 """at ~/.credentials/calendar-python-quickstart.json"""
+
 SCOPES = 'https://www.googleapis.com/auth/calendar'
 CLIENT_SECRET_FILE = 'data/gcalendar/client_secret.json'
-APPLICATION_NAME = 'Google Calendar For Discord'
-cal_id = 'primary'
 
 class gcalender:
 	"""Connect your Google Calender with Discord!"""
@@ -39,16 +37,16 @@ class gcalender:
 		credentials = get_creds()
 		http = credentials.authorize(httplib2.Http())
 		service = discovery.build('calendar', 'v3', http=http)
-
 		now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+		
 		eventsResult = service.events().list(
-			calendarId=cal_id, timeMin=now, maxResults=10, singleEvents=True,
+			calendarId=self.settings['cal_id'], timeMin=now, maxResults=10, singleEvents=True,
 			orderBy='startTime').execute()
 		events = eventsResult.get('items', [])
 		eventList = []
 		
 		if not events:
-			print('No upcoming events found.')
+			self.bot.say("No upcoming events found.")
 			
 		for event in events:
 			start = event['start'].get('dateTime', event['start'].get('date'))
@@ -61,22 +59,23 @@ class gcalender:
 	async def eventstoday(self):
 		"""List events for today
 		"""
+
 		todaydate = datetime.date.today()
 		today0h = str(todaydate) + "T00:00:00Z"
 		today23h = str(todaydate) +  "T23:59:59Z"
-
 		credentials = get_creds()
 		http = credentials.authorize(httplib2.Http())
 		service = discovery.build('calendar', 'v3', http=http)
 
 		eventsResult = service.events().list(
-			calendarId=cal_id, timeMin=today0h, timeMax=today23h, maxResults=20, singleEvents=True,
+			calendarId=self.settings['cal_id'], timeMin=today0h, timeMax=today23h, maxResults=20, singleEvents=True,
 			orderBy='startTime').execute()
 		events = eventsResult.get('items', [])
 		eventList = []
 		
 		if not events:
 			await self.bot.say("No events found for today.")
+
 		for event in events:
 			start = event['start'].get('dateTime', event['start'].get('date'))
 			ev_summary = event['summary']
@@ -88,22 +87,23 @@ class gcalender:
 	async def eventstomorrow(self):
 		"""List events for tomorrow
 		"""
+
 		tomorrowdate = datetime.date.today() + datetime.timedelta(days=1)
 		tomorrow0h = str(tomorrowdate) + "T00:00:00Z"
 		tomorrow23h = str(tomorrowdate) +  "T23:59:59Z"
-
 		credentials = get_creds()
 		http = credentials.authorize(httplib2.Http())
 		service = discovery.build('calendar', 'v3', http=http)
 
 		eventsResult = service.events().list(
-			calendarId=cal_id, timeMin=tomorrow0h, timeMax=tomorrow23h, maxResults=10, singleEvents=True,
+			calendarId=self.settings['cal_id'], timeMin=tomorrow0h, timeMax=tomorrow23h, maxResults=10, singleEvents=True,
 			orderBy='startTime').execute()
 		events = eventsResult.get('items', [])
 		eventList = []
 		
 		if not events:
 			await self.bot.say("No events found for tomorrow.")
+
 		for event in events:
 			start = event['start'].get('dateTime', event['start'].get('date'))
 			ev_summary = event['summary']
@@ -116,9 +116,10 @@ class gcalender:
 		"""Show active calendar and available calendars
 		"""
 
-		await self.bot.say("The active calendar is: " + cal_id + ".")
+		await self.bot.say("The active calendar is: " + self.settings['cal_id'] + ".")
 		await self.bot.say("Printing list of available calendars and thier IDs...")		
 		page_token = None
+
 		while True:
 			credentials = get_creds()
 			http = credentials.authorize(httplib2.Http())
@@ -143,15 +144,18 @@ class gcalender:
 
 	@commands.command(pass_context=True, no_pm=True)
 	async def setcal(self, ctx, calendar_ID):
-		global cal_id
-		
+		"""Change the active calendar. Get the ID from [p]listcals
+		"""
+
 		page_token = None
+
 		while True:
 			credentials = get_creds()
 			http = credentials.authorize(httplib2.Http())
 			service = discovery.build('calendar', 'v3', http=http)
 			calendar_list = service.calendarList().list(pageToken=page_token).execute()
 			calIDList = []
+
 			for calendar_list_entry in calendar_list['items']:
 				cal_ids = calendar_list_entry['id']
 				calIDList.append(str(cal_ids))
@@ -162,6 +166,7 @@ class gcalender:
 		if calendar_ID not in calIDList:
 			await self.bot.say("That ID doesn't match any you have access to.")
 			return
+
 		elif calendar_ID in calIDList:
 			await self.bot.say("Do you want to change the active calendar to '" + str(calendar_ID) + "'? (yes/no)")
 			answer = await self.bot.wait_for_message(timeout=15, author=ctx.message.author)
@@ -169,11 +174,13 @@ class gcalender:
 			if answer is None:
 				await self.bot.say("No changes made to active calendar.")
 				return
+
 			elif "yes" not in answer.content.lower():
 				await self.bot.say("No changes made to active calendar.")
 				return
 				
-			cal_id = calendar_ID	
+			self.settings['cal_id'] = calendar_ID
+			fileIO("data/gcalender/settings.json", "save", self.settings)
 			await self.bot.say("Active calendar is now set to: " + str(cal_id))
 
 def get_creds():
@@ -185,6 +192,7 @@ def get_creds():
 	Returns:
 		Credentials, the obtained credential.
 	"""
+
 	credential_dir = os.path.join('data/GCalendar/creds', '.credentials')
 	if not os.path.exists(credential_dir):
 		os.makedirs(credential_dir)
@@ -195,7 +203,7 @@ def get_creds():
 	credentials = store.get()
 	if not credentials or credentials.invalid:
 		flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
-		flow.user_agent = APPLICATION_NAME
+		flow.user_agent = self.settings['app_name']
 		if flags:
 			credentials = tools.run_flow(flow, store, flags)
 		else: # Needed only for compatibility with Python 2.6
@@ -209,7 +217,7 @@ def check_folders():
 		os.makedirs("data/GCalendar")
 
 def check_settings():
-	settings = {"app_name" : "Put your application name here!"}
+	settings = {"app_name" : "Put your application name here!", "cal_id" : "primary"}
 
 	f = "data/GCalendar/settings.json"
 	if not fileIO(f, "check"):
