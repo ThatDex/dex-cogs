@@ -181,7 +181,7 @@ class gcalender:
 				
 			self.settings['cal_id'] = calendar_ID
 			fileIO("data/gcalendar/settings.json", "save", self.settings)
-			await self.bot.say("Active calendar is now set to: " + str(cal_id))
+			await self.bot.say("Active calendar is now set to: " + self.settings['cal_id'])
 
 def get_creds():
 	"""Gets valid user credentials from storage.
