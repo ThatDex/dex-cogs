@@ -31,6 +31,7 @@ class gcalender:
 		self.bot = bot
 		self.settings = fileIO("data/gcalendar/settings.json", "load")
 
+"""----------------------Event Listing-------------------------------------------------"""
 	async def ten_apps(self):
 
 		credentials = get_creds()
@@ -132,7 +133,7 @@ class gcalender:
 				calIDList.append(str(cal_ids))
 				
 			await self.bot.say("```" + "\n" + "\n".join(calList) + "\n" + "```")
-			await self.bot.say("```" + "\n" + "Use [p]setcal 'Calendar ID' to change the active calendar." + "\n" + "```")
+			await self.bot.say("```" + "\n" + "Use [p]gcalendat setcal 'Calendar ID' to change the active calendar." + "\n" + "```")
 					
 			page_token = calendar_list.get('nextPageToken')
 			if not page_token:
@@ -208,7 +209,7 @@ class gcalender:
 	@gcalendar.command(pass_context=True, no_pm=True, name="setcal")
 	async def gcalendar_setcal(self, ctx, calendar_ID):
 
-		await self.set_cal(ctx, calendar_ID)
+		await self.set_cal(self, ctx, calendar_ID)
 
 def get_creds():
 	"""Gets valid user credentials from storage.
