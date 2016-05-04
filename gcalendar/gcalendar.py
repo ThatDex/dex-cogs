@@ -180,7 +180,7 @@ class gcalender:
 				return
 				
 			self.settings['cal_id'] = calendar_ID
-			fileIO("data/gcalender/settings.json", "save", self.settings)
+			fileIO("data/gcalendar/settings.json", "save", self.settings)
 			await self.bot.say("Active calendar is now set to: " + str(cal_id))
 
 def get_creds():
