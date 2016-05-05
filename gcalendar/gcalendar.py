@@ -185,6 +185,8 @@ class gcalender:
 			await send_cmd_help(ctx)
 			return
 
+#-----------------------------------Event Listing-----------------------------------#
+	
 	@gcalendar.command(pass_context=True, name="tenapps")
 	async def gcalendar_tenapps(self):
 		"""Show the next 10 appointments
@@ -206,6 +208,9 @@ class gcalender:
 
 		await self.events_tomorrow()
 
+#-----------------------------------Admin Actions-----------------------------------#
+
+	@checks.mod_or_permissions(manage_messages=True)
 	@gcalendar.command(pass_context=True, name="listcals")
 	async def gcalendar_listcals(self):
 		"""List available calendars
