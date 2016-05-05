@@ -214,8 +214,6 @@ class gcalender:
 	@gcalendar.command(pass_context=True, name="listcals")
 	async def gcalendar_listcals(self):
 		"""List available calendars
-
-		Shows the active calendar
 		"""
 
 		await self.list_cals()
