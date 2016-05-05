@@ -123,7 +123,7 @@ class gcalender:
 			service = discovery.build('calendar', 'v3', http=http)
 			calendar_list = service.calendarList().list(pageToken=page_token).execute()
 			calList = []
-			calIDList = ["primary"]
+			calIDList = []
 			for calendar_list_entry in calendar_list['items']:
 				cal_names = calendar_list_entry['summary']
 				cal_ids = calendar_list_entry['id']
@@ -131,10 +131,10 @@ class gcalender:
 				calList.append("Calendar Name: " + str(cal_names) + "\n" + 
 					"Calendar ID: " + str(cal_ids) + "\n" + "Permission Level: " + str(cal_perms) + "\n")
 				calIDList.append(str(cal_ids))
-			
-			await self.bot.say(calList)	
+
 			await self.bot.say("```" + "\n" + "\n".join(calList) + "\n" + "```")
-			await self.bot.say("```" + "\n" + "Use [p]gcalendat setcal 'Calendar ID' to change the active calendar." + "\n" + "```")
+			await self.bot.say("```" + "\n" + "Use [p]gcalendat setcal 'Calendar ID' to change the active calendar." + "\n" +
+							"You can also use [p]gcalendar setcal primary to use the default calendar" + "\n" + "```")
 					
 			page_token = calendar_list.get('nextPageToken')
 			if not page_token:
@@ -162,16 +162,16 @@ class gcalender:
 			await self.bot.say("That ID doesn't match any you have access to.")
 			return
 
-		elif calendar_ID in calIDList:
+		elif calendar_ID or "primary" in calIDList:
 			await self.bot.say("Do you want to change the active calendar to '" + str(calendar_ID) + "'? (yes/no)")
 			answer = await self.bot.wait_for_message(timeout=15, author=ctx.message.author)
 			
 			if answer is None:
-				await self.bot.say("No changes made to active calendar.")
+				await self.bot.say("No changes have been made to the active calendar.")
 				return
 
 			elif "yes" not in answer.content.lower():
-				await self.bot.say("No changes made to active calendar.")
+				await self.bot.say("No changes have been made to the active calendar.")
 				return
 				
 			self.settings['cal_id'] = calendar_ID
