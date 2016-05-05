@@ -131,7 +131,8 @@ class gcalender:
 				calList.append("Calendar Name: " + str(cal_names) + "\n" + 
 					"Calendar ID: " + str(cal_ids) + "\n" + "Permission Level: " + str(cal_perms) + "\n")
 				calIDList.append(str(cal_ids))
-				
+			
+			await self.bot.say(calList)	
 			await self.bot.say("```" + "\n" + "\n".join(calList) + "\n" + "```")
 			await self.bot.say("```" + "\n" + "Use [p]gcalendat setcal 'Calendar ID' to change the active calendar." + "\n" + "```")
 					
