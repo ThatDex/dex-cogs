@@ -263,18 +263,18 @@ class gcalender:
 		await self.events_tomorrow()
 
 	@gcalendar.command(pass_context=True, name="thisweek")
-		async def gcalendar_events_this_week(self):
-			"""Show events for this week
-			"""
+	async def gcalendar_events_this_week(self):
+		"""Show events for this week
+		"""
 
-			await self.events_this_week()
+		await self.events_this_week()
 
 	@gcalendar.command(pass_context=True, name="nextweek")
-		async def gcalendar_events_next_week(self):
-			"""Show events for next week
-			"""
+	async def gcalendar_events_next_week(self):
+		"""Show events for next week
+		"""
 
-			await self.events_next_week()
+		await self.events_next_week()
 
 #-----------------------------------Admin Actions-----------------------------------#
 
