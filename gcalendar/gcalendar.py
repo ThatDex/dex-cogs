@@ -2,10 +2,12 @@ import discord
 from discord.ext import commands
 import os
 import datetime
+import json
+
+#-------Google Calendar Imports-------#
 from apiclient import discovery
 import httplib2
 import oauth2client
-import json
 from cogs.utils import checks
 from cogs.utils.dataIO import fileIO
 from oauth2client import client
@@ -30,6 +32,8 @@ class gcalender:
 	def __init__(self, bot):
 		self.bot = bot
 		self.settings = fileIO("data/gcalendar/settings.json", "load")
+
+#-----------------------------------Event Listing-----------------------------------#
 
 	async def ten_apps(self):
 
@@ -107,6 +111,8 @@ class gcalender:
 			eventList.append(start + " " + ev_summary)
 
 		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
+
+#-----------------------------------Admin Actions-----------------------------------#
 
 	async def list_cals(self):
 		"""Show active calendar and available calendars
@@ -209,6 +215,8 @@ class gcalender:
 	async def gcalendar_setcal(self, ctx, calendar_ID):
 
 		await self.set_cal(ctx, calendar_ID)
+
+#-----------------------------------Setup-----------------------------------#
 
 def get_creds():
 	"""Gets valid user credentials from storage.
