@@ -157,7 +157,9 @@ class gcalender:
 			page_token = calendar_list.get('nextPageToken')
 			if not page_token:
 				break
-		
+				
+		primary = "primary"
+
 		if calendar_ID not in (calIDList or primary):
 			await self.bot.say("That ID doesn't match any you have access to.")
 			return
