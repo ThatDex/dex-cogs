@@ -154,17 +154,16 @@ class gcalender:
 			for calendar_list_entry in calendar_list['items']:
 				cal_ids = calendar_list_entry['id']
 				calIDList.append(str(cal_ids))
+				calIDList.append('primary')
 			page_token = calendar_list.get('nextPageToken')
 			if not page_token:
 				break
-				
-		primary = "primary"
 
-		if calendar_ID not in (calIDList or primary):
+		if calendar_ID not in calIDList:
 			await self.bot.say("That ID doesn't match any you have access to.")
 			return
 
-		elif calendar_ID in (calIDList or primary):
+		elif calendar_ID in calIDList:
 			await self.bot.say("Do you want to change the active calendar to '" + str(calendar_ID) + "'? (yes/no)")
 			answer = await self.bot.wait_for_message(timeout=15, author=ctx.message.author)
 			
