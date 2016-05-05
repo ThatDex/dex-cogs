@@ -178,7 +178,6 @@ class gcalender:
 			await self.bot.say("Active calendar is now set to: " + self.settings['cal_id'])
 
 	@commands.group(no_pm=True, pass_context=True)
-	@checks.mod_or_permissions(manage_messages=True)
 	async def gcalendar(self, ctx):
 		if ctx.invoked_subcommand is None:
 			await send_cmd_help(ctx)
@@ -188,7 +187,7 @@ class gcalender:
 	async def gcalendar_tenapps(self):
 		"""Show the next 10 appointments
 		"""
-		
+
 		await self.ten_apps()
 						
 	@gcalendar.command(pass_context=True, name="eventstoday")
