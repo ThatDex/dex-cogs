@@ -123,7 +123,7 @@ class gcalender:
 			service = discovery.build('calendar', 'v3', http=http)
 			calendar_list = service.calendarList().list(pageToken=page_token).execute()
 			calList = []
-			calIDList = []
+			calIDList = [primary]
 			for calendar_list_entry in calendar_list['items']:
 				cal_names = calendar_list_entry['summary']
 				cal_ids = calendar_list_entry['id']
@@ -212,7 +212,7 @@ class gcalender:
 		"""
 
 		await self.list_cals()
-		
+
 	@checks.mod_or_permissions(manage_messages=True)
 	@gcalendar.command(pass_context=True, no_pm=True, name="setcal")
 	async def gcalendar_setcal(self, ctx, calendar_ID):
