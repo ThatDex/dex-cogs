@@ -180,34 +180,29 @@ class gcalender:
 			await self.bot.say("Active calendar is now set to: " + self.settings['cal_id'])
 
 	@commands.group(no_pm=True, pass_context=True)
-	async def gcalendar_events(self, ctx):
+	async def gcalendar(self, ctx):
 		if ctx.invoked_subcommand is None:
 			await send_cmd_help(ctx)
 			return
 
-	@commands.group(no_pm=True, pass_context=True)
-	async def gcalendar_admin(self, ctx):
-		if ctx.invoked_subcommand is None:
-			await send_cmd_help(ctx)
-			return
 #-----------------------------------Event Listing-----------------------------------#
 	
-	@gcalendar_events.command(pass_context=True, name="tenapps")
-	async def gcalendar_events_tenapps(self):
+	@gcalendar.command(pass_context=True, name="tenapps")
+	async def gcalendar_tenapps(self):
 		"""Show the next 10 appointments
 		"""
 
 		await self.ten_apps()
 						
-	@gcalendar_events.command(pass_context=True, name="eventstoday")
-	async def gcalendar_events_eventstoday(self):
+	@gcalendar.command(pass_context=True, name="eventstoday")
+	async def gcalendar_eventstoday(self):
 		"""List events for today
 		"""
 
 		await self.events_today()
 
-	@gcalendar_events.command(pass_context=True, name="eventstomorrow")
-	async def gcalendar_events_eventstomorrow(self):
+	@gcalendar.command(pass_context=True, name="eventstomorrow")
+	async def gcalendars_eventstomorrow(self):
 		"""List events for tomorrow
 		"""
 
@@ -216,8 +211,8 @@ class gcalender:
 #-----------------------------------Admin Actions-----------------------------------#
 
 	@checks.mod_or_permissions(manage_messages=True)
-	@gcalendar_admin.command(pass_context=True, name="listcals")
-	async def gcalendar_admin_listcals(self):
+	@gcalendar.command(pass_context=True, name="listcals")
+	async def gcalendar_listcals(self):
 		"""List available calendars
 
 		Shows the active calendar
@@ -226,8 +221,8 @@ class gcalender:
 		await self.list_cals()
 
 	@checks.mod_or_permissions(manage_messages=True)
-	@gcalendar_admin.command(pass_context=True, no_pm=True, name="setcal")
-	async def gcalendar_admin_setcal(self, ctx, calendar_ID):
+	@gcalendar.command(pass_context=True, no_pm=True, name="setcal")
+	async def gcalendar_setcal(self, ctx, calendar_ID):
 		"""Change the active calendar. 
 
 		Get the ID from [p]gcalendar listcals
