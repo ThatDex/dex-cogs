@@ -123,7 +123,7 @@ class gcalender:
 			service = discovery.build('calendar', 'v3', http=http)
 			calendar_list = service.calendarList().list(pageToken=page_token).execute()
 			calList = []
-			calIDList = [primary]
+			calIDList = ["primary"]
 			for calendar_list_entry in calendar_list['items']:
 				cal_names = calendar_list_entry['summary']
 				cal_ids = calendar_list_entry['id']
