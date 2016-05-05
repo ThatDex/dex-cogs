@@ -150,7 +150,6 @@ class gcalender:
 			service = discovery.build('calendar', 'v3', http=http)
 			calendar_list = service.calendarList().list(pageToken=page_token).execute()
 			calIDList = []
-			primary = "primary"
 
 			for calendar_list_entry in calendar_list['items']:
 				cal_ids = calendar_list_entry['id']
@@ -159,11 +158,11 @@ class gcalender:
 			if not page_token:
 				break
 		
-		if calendar_ID not in calIDList or primary:
+		if calendar_ID not in calIDList or primary):
 			await self.bot.say("That ID doesn't match any you have access to.")
 			return
 
-		elif calendar_ID in calIDList or primary:
+		elif calendar_ID in (calIDList or primary):
 			await self.bot.say("Do you want to change the active calendar to '" + str(calendar_ID) + "'? (yes/no)")
 			answer = await self.bot.wait_for_message(timeout=15, author=ctx.message.author)
 			
