@@ -2,10 +2,13 @@ import discord
 from discord.ext import commands
 import os
 import datetime
+import json
+from __main__ import send_cmd_help
+
+#-------Google Calendar Imports-------#
 from apiclient import discovery
 import httplib2
 import oauth2client
-import json
 from cogs.utils import checks
 from cogs.utils.dataIO import fileIO
 from oauth2client import client
@@ -31,6 +34,8 @@ class gcalender:
 		self.bot = bot
 		self.settings = fileIO("data/gcalendar/settings.json", "load")
 
+#-----------------------------------Event Listing-----------------------------------#
+
 	async def ten_apps(self):
 
 		credentials = get_creds()
@@ -55,8 +60,6 @@ class gcalender:
 		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
 
 	async def events_today(self):
-		"""List events for today
-		"""
 
 		todaydate = datetime.date.today()
 		today0h = str(todaydate) + "T00:00:00Z"
@@ -82,8 +85,6 @@ class gcalender:
 		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
 
 	async def events_tomorrow(self):
-		"""List events for tomorrow
-		"""
 
 		tomorrowdate = datetime.date.today() + datetime.timedelta(days=1)
 		tomorrow0h = str(tomorrowdate) + "T00:00:00Z"
@@ -108,9 +109,9 @@ class gcalender:
 
 		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
 
+#-----------------------------------Admin Actions-----------------------------------#
+
 	async def list_cals(self):
-		"""Show active calendar and available calendars
-		"""
 
 		await self.bot.say("The active calendar is: " + self.settings['cal_id'] + ".")
 		await self.bot.say("Printing list of available calendars and thier IDs...")		
@@ -139,8 +140,6 @@ class gcalender:
 				break
 
 	async def set_cal(self, ctx, calendar_ID):
-		"""Change the active calendar. Get the ID from [p]listcals
-		"""
 
 		page_token = None
 
@@ -182,33 +181,45 @@ class gcalender:
 	@checks.mod_or_permissions(manage_messages=True)
 	async def gcalendar(self, ctx):
 		if ctx.invoked_subcommand is None:
-			await self.bot.say("Error")
+			await send_cmd_help(ctx)
 			return
 
 	@gcalendar.command(pass_context=True, name="tenapps")
 	async def gcalendar_tenapps(self):
-
+		"""Show the next 10 appointments
+		"""
+		
 		await self.ten_apps()
 						
 	@gcalendar.command(pass_context=True, name="eventstoday")
 	async def gcalendar_eventstoday(self):
+		"""List events for today
+		"""
 
 		await self.events_today()
 
 	@gcalendar.command(pass_context=True, name="eventstomorrow")
 	async def gcalendar_eventstomorrow(self):
+		"""List events for tomorrow
+		"""
 
 		await self.events_tomorrow()
 
 	@gcalendar.command(pass_context=True, name="listcals")
 	async def gcalendar_listcals(self):
+		"""Show active calendar and available calendars
+		"""
 
 		await self.list_cals()
 
 	@gcalendar.command(pass_context=True, no_pm=True, name="setcal")
 	async def gcalendar_setcal(self, ctx, calendar_ID):
+		"""Change the active calendar. Get the ID from [p]gcalendar listcals
+		"""
 
 		await self.set_cal(ctx, calendar_ID)
+
+#-----------------------------------Setup-----------------------------------#
 
 def get_creds():
 	"""Gets valid user credentials from storage.
