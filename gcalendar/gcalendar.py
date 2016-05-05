@@ -206,9 +206,9 @@ class gcalender:
 
 	@gcalendar.command(pass_context=True, name="listcals")
 	async def gcalendar_listcals(self):
-		"""Show active calendar and 
+		"""List available calendars
 
-		list available calendars
+		Shows the active calendar
 		"""
 
 		await self.list_cals()
@@ -216,7 +216,7 @@ class gcalender:
 	@gcalendar.command(pass_context=True, no_pm=True, name="setcal")
 	async def gcalendar_setcal(self, ctx, calendar_ID):
 		"""Change the active calendar. 
-		
+
 		Get the ID from [p]gcalendar listcals
 		"""
 
