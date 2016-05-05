@@ -121,7 +121,7 @@ class gcalender:
 			now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
 			
 			eventsResult = service.events().list(
-				calendarId=self.settings['cal_id'], timeMin=today0h, timeMax=endweek23h, maxResults=50, singleEvents=True,
+				calendarId=self.settings['cal_id'], timeMin=start0h, timeMax=end23h, maxResults=50, singleEvents=True,
 				orderBy='startTime').execute()
 			events = eventsResult.get('items', [])
 			eventList = []
@@ -148,7 +148,7 @@ class gcalender:
 			now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
 			
 			eventsResult = service.events().list(
-				calendarId=self.settings['cal_id'], timeMin=today0h, timeMax=endweek23h, maxResults=50, singleEvents=True,
+				calendarId=self.settings['cal_id'], timeMin=start0h, timeMax=end23h, maxResults=50, singleEvents=True,
 				orderBy='startTime').execute()
 			events = eventsResult.get('items', [])
 			eventList = []
