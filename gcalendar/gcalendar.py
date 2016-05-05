@@ -158,25 +158,25 @@ class gcalender:
 			if not page_token:
 				break
 		
-		if calendar_ID not in calIDList:
+		if calendar_ID or "primary" not in calIDList:
 			await self.bot.say("That ID doesn't match any you have access to.")
 			return
 
-		elif calendar_ID or "primary" in calIDList:
-			await self.bot.say("Do you want to change the active calendar to '" + str(calendar_ID) + "'? (yes/no)")
-			answer = await self.bot.wait_for_message(timeout=15, author=ctx.message.author)
-			
-			if answer is None:
-				await self.bot.say("No changes have been made to the active calendar.")
-				return
+		
+		await self.bot.say("Do you want to change the active calendar to '" + str(calendar_ID) + "'? (yes/no)")
+		answer = await self.bot.wait_for_message(timeout=15, author=ctx.message.author)
+		
+		if answer is None:
+			await self.bot.say("No changes have been made to the active calendar.")
+			return
 
-			elif "yes" not in answer.content.lower():
-				await self.bot.say("No changes have been made to the active calendar.")
-				return
-				
-			self.settings['cal_id'] = calendar_ID
-			fileIO("data/gcalendar/settings.json", "save", self.settings)
-			await self.bot.say("Active calendar is now set to: " + self.settings['cal_id'])
+		elif "yes" not in answer.content.lower():
+			await self.bot.say("No changes have been made to the active calendar.")
+			return
+			
+		self.settings['cal_id'] = calendar_ID
+		fileIO("data/gcalendar/settings.json", "save", self.settings)
+		await self.bot.say("Active calendar is now set to: " + self.settings['cal_id'])
 
 	@commands.group(no_pm=True, pass_context=True)
 	async def gcalendar(self, ctx):
