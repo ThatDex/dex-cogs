@@ -150,6 +150,7 @@ class gcalender:
 			service = discovery.build('calendar', 'v3', http=http)
 			calendar_list = service.calendarList().list(pageToken=page_token).execute()
 			calIDList = []
+			primary = "primary"
 
 			for calendar_list_entry in calendar_list['items']:
 				cal_ids = calendar_list_entry['id']
@@ -158,25 +159,25 @@ class gcalender:
 			if not page_token:
 				break
 		
-		if calendar_ID or "primary" not in calIDList:
+		if calendar_ID not in calIDList or primary:
 			await self.bot.say("That ID doesn't match any you have access to.")
 			return
 
-		
-		await self.bot.say("Do you want to change the active calendar to '" + str(calendar_ID) + "'? (yes/no)")
-		answer = await self.bot.wait_for_message(timeout=15, author=ctx.message.author)
-		
-		if answer is None:
-			await self.bot.say("No changes have been made to the active calendar.")
-			return
-
-		elif "yes" not in answer.content.lower():
-			await self.bot.say("No changes have been made to the active calendar.")
-			return
+		elif calendar_ID in calIDList or primary:
+			await self.bot.say("Do you want to change the active calendar to '" + str(calendar_ID) + "'? (yes/no)")
+			answer = await self.bot.wait_for_message(timeout=15, author=ctx.message.author)
 			
-		self.settings['cal_id'] = calendar_ID
-		fileIO("data/gcalendar/settings.json", "save", self.settings)
-		await self.bot.say("Active calendar is now set to: " + self.settings['cal_id'])
+			if answer is None:
+				await self.bot.say("No changes have been made to the active calendar.")
+				return
+
+			elif "yes" not in answer.content.lower():
+				await self.bot.say("No changes have been made to the active calendar.")
+				return
+				
+			self.settings['cal_id'] = calendar_ID
+			fileIO("data/gcalendar/settings.json", "save", self.settings)
+			await self.bot.say("Active calendar is now set to: " + self.settings['cal_id'])
 
 	@commands.group(no_pm=True, pass_context=True)
 	async def gcalendar(self, ctx):
