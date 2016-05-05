@@ -69,7 +69,7 @@ class gcalender:
 		service = discovery.build('calendar', 'v3', http=http)
 
 		eventsResult = service.events().list(
-			calendarId=self.settings['cal_id'], timeMin=today0h, timeMax=today23h, maxResults=20, singleEvents=True,
+			calendarId=self.settings['cal_id'], timeMin=today0h, timeMax=today23h, maxResults=50, singleEvents=True,
 			orderBy='startTime').execute()
 		events = eventsResult.get('items', [])
 		eventList = []
@@ -94,7 +94,7 @@ class gcalender:
 		service = discovery.build('calendar', 'v3', http=http)
 
 		eventsResult = service.events().list(
-			calendarId=self.settings['cal_id'], timeMin=tomorrow0h, timeMax=tomorrow23h, maxResults=10, singleEvents=True,
+			calendarId=self.settings['cal_id'], timeMin=tomorrow0h, timeMax=tomorrow23h, maxResults=50, singleEvents=True,
 			orderBy='startTime').execute()
 		events = eventsResult.get('items', [])
 		eventList = []
@@ -102,6 +102,60 @@ class gcalender:
 		if not events:
 			await self.bot.say("No events found for tomorrow.")
 
+		for event in events:
+			start = event['start'].get('dateTime', event['start'].get('date'))
+			ev_summary = event['summary']
+			eventList.append(start + " " + ev_summary)
+
+		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
+
+async def events_this_week(self):
+
+		startdate = datetime.date.today() - datetime.timedelta(datetime.datetime.today().weekday())
+		enddate = startdate + datetime.timedelta(days=6)
+		start0h = str(startdate) + "T00:00:00Z"
+		end23h = str(enddate) + "T23:59:59Z"
+		credentials = get_creds()
+		http = credentials.authorize(httplib2.Http())
+		service = discovery.build('calendar', 'v3', http=http)
+		now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+		
+		eventsResult = service.events().list(
+			calendarId=self.settings['cal_id'], timeMin=today0h, timeMax=endweek23h, maxResults=50, singleEvents=True,
+			orderBy='startTime').execute()
+		events = eventsResult.get('items', [])
+		eventList = []
+		
+		if not events:
+			await self.bot.say("No upcoming events found for this week.")
+			
+		for event in events:
+			start = event['start'].get('dateTime', event['start'].get('date'))
+			ev_summary = event['summary']
+			eventList.append(start + " " + ev_summary)
+
+		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
+
+async def events_next_week(self):
+
+		startdate = (datetime.date.today() - datetime.timedelta(datetime.datetime.today().weekday())) + datetime.timedelta(days=7)
+		enddate = startdate + datetime.timedelta(days=6)
+		start0h = str(startdate) + "T00:00:00Z"
+		end23h = str(enddate) + "T23:59:59Z"
+		credentials = get_creds()
+		http = credentials.authorize(httplib2.Http())
+		service = discovery.build('calendar', 'v3', http=http)
+		now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+		
+		eventsResult = service.events().list(
+			calendarId=self.settings['cal_id'], timeMin=today0h, timeMax=endweek23h, maxResults=50, singleEvents=True,
+			orderBy='startTime').execute()
+		events = eventsResult.get('items', [])
+		eventList = []
+		
+		if not events:
+			await self.bot.say("No upcoming events found for this week.")
+			
 		for event in events:
 			start = event['start'].get('dateTime', event['start'].get('date'))
 			ev_summary = event['summary']
@@ -194,19 +248,33 @@ class gcalender:
 
 		await self.ten_apps()
 						
-	@gcalendar.command(pass_context=True, name="eventstoday")
+	@gcalendar.command(pass_context=True, name="today")
 	async def gcalendar_eventstoday(self):
 		"""List events for today
 		"""
 
 		await self.events_today()
 
-	@gcalendar.command(pass_context=True, name="eventstomorrow")
+	@gcalendar.command(pass_context=True, name="tomorrow")
 	async def gcalendars_eventstomorrow(self):
 		"""List events for tomorrow
 		"""
 
 		await self.events_tomorrow()
+
+@gcalendar.command(pass_context=True, name="thisweek")
+	async def gcalendar_events_this_week(self):
+		"""Show events for this week
+		"""
+
+		await self.events_this_week()
+
+@gcalendar.command(pass_context=True, name="nextweek")
+	async def gcalendar_events_next_week(self):
+		"""Show events for next week
+		"""
+
+		await self.events_next_week()
 
 #-----------------------------------Admin Actions-----------------------------------#
 
