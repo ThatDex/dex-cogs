@@ -180,7 +180,7 @@ class gcalender:
 			await self.bot.say("Active calendar is now set to: " + self.settings['cal_id'])
 
 	@commands.group(no_pm=True, pass_context=True)
-	async def gcalendar(self, ctx):
+	async def gcalendar_events(self, ctx):
 		if ctx.invoked_subcommand is None:
 			await send_cmd_help(ctx)
 			return
@@ -192,22 +192,22 @@ class gcalender:
 			return
 #-----------------------------------Event Listing-----------------------------------#
 	
-	@gcalendar.command(pass_context=True, name="tenapps")
-	async def gcalendar_tenapps(self):
+	@gcalendar_events.command(pass_context=True, name="tenapps")
+	async def gcalendar_events_tenapps(self):
 		"""Show the next 10 appointments
 		"""
 
 		await self.ten_apps()
 						
-	@gcalendar.command(pass_context=True, name="eventstoday")
-	async def gcalendar_eventstoday(self):
+	@gcalendar_events.command(pass_context=True, name="eventstoday")
+	async def gcalendar_events_eventstoday(self):
 		"""List events for today
 		"""
 
 		await self.events_today()
 
-	@gcalendar.command(pass_context=True, name="eventstomorrow")
-	async def gcalendar_eventstomorrow(self):
+	@gcalendar_events.command(pass_context=True, name="eventstomorrow")
+	async def gcalendar_events_eventstomorrow(self):
 		"""List events for tomorrow
 		"""
 
