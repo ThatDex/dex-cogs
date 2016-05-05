@@ -212,7 +212,8 @@ class gcalender:
 		"""
 
 		await self.list_cals()
-
+		
+	@checks.mod_or_permissions(manage_messages=True)
 	@gcalendar.command(pass_context=True, no_pm=True, name="setcal")
 	async def gcalendar_setcal(self, ctx, calendar_ID):
 		"""Change the active calendar. 
