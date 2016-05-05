@@ -185,6 +185,11 @@ class gcalender:
 			await send_cmd_help(ctx)
 			return
 
+	@commands.group(no_pm=True, pass_context=True)
+	async def gcalendar_admin(self, ctx):
+		if ctx.invoked_subcommand is None:
+			await send_cmd_help(ctx)
+			return
 #-----------------------------------Event Listing-----------------------------------#
 	
 	@gcalendar.command(pass_context=True, name="tenapps")
@@ -211,8 +216,8 @@ class gcalender:
 #-----------------------------------Admin Actions-----------------------------------#
 
 	@checks.mod_or_permissions(manage_messages=True)
-	@gcalendar.command(pass_context=True, name="listcals")
-	async def gcalendar_listcals(self):
+	@gcalendar_admin.command(pass_context=True, name="listcals")
+	async def gcalendar_admin_listcals(self):
 		"""List available calendars
 
 		Shows the active calendar
@@ -221,8 +226,8 @@ class gcalender:
 		await self.list_cals()
 
 	@checks.mod_or_permissions(manage_messages=True)
-	@gcalendar.command(pass_context=True, no_pm=True, name="setcal")
-	async def gcalendar_setcal(self, ctx, calendar_ID):
+	@gcalendar_admin.command(pass_context=True, no_pm=True, name="setcal")
+	async def gcalendar_admin_setcal(self, ctx, calendar_ID):
 		"""Change the active calendar. 
 
 		Get the ID from [p]gcalendar listcals
