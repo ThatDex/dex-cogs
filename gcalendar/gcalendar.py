@@ -109,59 +109,59 @@ class gcalender:
 
 		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
 
-async def events_this_week(self):
+	async def events_this_week(self):
 
-		startdate = datetime.date.today() - datetime.timedelta(datetime.datetime.today().weekday())
-		enddate = startdate + datetime.timedelta(days=6)
-		start0h = str(startdate) + "T00:00:00Z"
-		end23h = str(enddate) + "T23:59:59Z"
-		credentials = get_creds()
-		http = credentials.authorize(httplib2.Http())
-		service = discovery.build('calendar', 'v3', http=http)
-		now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-		
-		eventsResult = service.events().list(
-			calendarId=self.settings['cal_id'], timeMin=today0h, timeMax=endweek23h, maxResults=50, singleEvents=True,
-			orderBy='startTime').execute()
-		events = eventsResult.get('items', [])
-		eventList = []
-		
-		if not events:
-			await self.bot.say("No upcoming events found for this week.")
+			startdate = datetime.date.today() - datetime.timedelta(datetime.datetime.today().weekday())
+			enddate = startdate + datetime.timedelta(days=6)
+			start0h = str(startdate) + "T00:00:00Z"
+			end23h = str(enddate) + "T23:59:59Z"
+			credentials = get_creds()
+			http = credentials.authorize(httplib2.Http())
+			service = discovery.build('calendar', 'v3', http=http)
+			now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
 			
-		for event in events:
-			start = event['start'].get('dateTime', event['start'].get('date'))
-			ev_summary = event['summary']
-			eventList.append(start + " " + ev_summary)
-
-		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
-
-async def events_next_week(self):
-
-		startdate = (datetime.date.today() - datetime.timedelta(datetime.datetime.today().weekday())) + datetime.timedelta(days=7)
-		enddate = startdate + datetime.timedelta(days=6)
-		start0h = str(startdate) + "T00:00:00Z"
-		end23h = str(enddate) + "T23:59:59Z"
-		credentials = get_creds()
-		http = credentials.authorize(httplib2.Http())
-		service = discovery.build('calendar', 'v3', http=http)
-		now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-		
-		eventsResult = service.events().list(
-			calendarId=self.settings['cal_id'], timeMin=today0h, timeMax=endweek23h, maxResults=50, singleEvents=True,
-			orderBy='startTime').execute()
-		events = eventsResult.get('items', [])
-		eventList = []
-		
-		if not events:
-			await self.bot.say("No upcoming events found for this week.")
+			eventsResult = service.events().list(
+				calendarId=self.settings['cal_id'], timeMin=today0h, timeMax=endweek23h, maxResults=50, singleEvents=True,
+				orderBy='startTime').execute()
+			events = eventsResult.get('items', [])
+			eventList = []
 			
-		for event in events:
-			start = event['start'].get('dateTime', event['start'].get('date'))
-			ev_summary = event['summary']
-			eventList.append(start + " " + ev_summary)
+			if not events:
+				await self.bot.say("No upcoming events found for this week.")
+				
+			for event in events:
+				start = event['start'].get('dateTime', event['start'].get('date'))
+				ev_summary = event['summary']
+				eventList.append(start + " " + ev_summary)
 
-		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
+			await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
+
+	async def events_next_week(self):
+
+			startdate = (datetime.date.today() - datetime.timedelta(datetime.datetime.today().weekday())) + datetime.timedelta(days=7)
+			enddate = startdate + datetime.timedelta(days=6)
+			start0h = str(startdate) + "T00:00:00Z"
+			end23h = str(enddate) + "T23:59:59Z"
+			credentials = get_creds()
+			http = credentials.authorize(httplib2.Http())
+			service = discovery.build('calendar', 'v3', http=http)
+			now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+			
+			eventsResult = service.events().list(
+				calendarId=self.settings['cal_id'], timeMin=today0h, timeMax=endweek23h, maxResults=50, singleEvents=True,
+				orderBy='startTime').execute()
+			events = eventsResult.get('items', [])
+			eventList = []
+			
+			if not events:
+				await self.bot.say("No upcoming events found for this week.")
+				
+			for event in events:
+				start = event['start'].get('dateTime', event['start'].get('date'))
+				ev_summary = event['summary']
+				eventList.append(start + " " + ev_summary)
+
+			await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
 
 #-----------------------------------Admin Actions-----------------------------------#
 
