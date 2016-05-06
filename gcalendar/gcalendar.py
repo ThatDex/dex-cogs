@@ -165,11 +165,11 @@ class gcalender:
 
 	async def events_range(self, start_date, end_date):
 
-			if start_date < end_date:
+			if start_date > end_date:
 				await self.bot.say("The start of your range must be ***BEFORE*** the end date.")
 				return
 
-			elif start_date > end_date:
+			elif start_date < end_date:
 				startdate = start_date
 				enddate = end_date
 				start = str(startdate) + "T00:00:00Z"
@@ -310,10 +310,12 @@ class gcalender:
 
 	@gcalendar.command(pass_context=True, name="between")
 	async def gcalendar_range(self, start_date, end_date):
-		"""Show events between two dates
+		"""Show events between two dates.
+
+		Date format: YYYY-MM-DD
 		"""
 
-		await self.events_range()
+		await self.events_range(start_date, end_date)
 
 #-----------------------------------Admin Actions-----------------------------------#
 
