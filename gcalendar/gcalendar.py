@@ -163,6 +163,38 @@ class gcalender:
 
 			await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
 
+	async def events_range(self, start_date, end_date):
+
+			if start_date < end_date:
+				await self.bot.say("The start of your range must be ***BEFORE*** the end date.")
+				return
+
+			elif start_date > end_date:
+				startdate = start_date
+				enddate = end_date
+				start = str(startdate) + "T00:00:00Z"
+				end = str(enddate) + "T23:59:59Z"
+				credentials = get_creds()
+				http = credentials.authorize(httplib2.Http())
+				service = discovery.build('calendar', 'v3', http=http)
+				now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+				
+				eventsResult = service.events().list(
+					calendarId=self.settings['cal_id'], timeMin=start, timeMax=end, maxResults=50, singleEvents=True,
+					orderBy='startTime').execute()
+				events = eventsResult.get('items', [])
+				eventList = []
+				
+				if not events:
+					await self.bot.say("No upcoming events found for this week.")
+					
+				for event in events:
+					start = event['start'].get('dateTime', event['start'].get('date'))
+					ev_summary = event['summary']
+					eventList.append(start + " " + ev_summary)
+
+				await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
+
 #-----------------------------------Admin Actions-----------------------------------#
 
 	async def list_cals(self):
@@ -263,18 +295,25 @@ class gcalender:
 		await self.events_tomorrow()
 
 	@gcalendar.command(pass_context=True, name="thisweek")
-	async def gcalendar_events_this_week(self):
+	async def gcalendar_eventsthisweek(self):
 		"""Show events for this week
 		"""
 
 		await self.events_this_week()
 
 	@gcalendar.command(pass_context=True, name="nextweek")
-	async def gcalendar_events_next_week(self):
+	async def gcalendar_eventsnextweek(self):
 		"""Show events for next week
 		"""
 
 		await self.events_next_week()
+
+	@gcalendar.command(pass_context=True, name="between")
+	async def gcalendar_range(self, start_date, end_date):
+		"""Show events between two dates
+		"""
+
+		await self.events_range()
 
 #-----------------------------------Admin Actions-----------------------------------#
 
