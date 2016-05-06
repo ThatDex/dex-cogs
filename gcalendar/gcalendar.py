@@ -315,7 +315,7 @@ class gcalender:
 		Date format: YYYY-MM-DD
 		"""
 
-		await self.events_range(ctx, start_date, end_date)
+		await self.events_range(start_date, end_date)
 
 #-----------------------------------Admin Actions-----------------------------------#
 
