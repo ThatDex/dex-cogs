@@ -192,6 +192,9 @@ class gcalender:
 					eventList.append(start + " " + ev_summary)
 
 				await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
+				return
+
+			await self.bot.say("Make sure you use the format YYYY-MM-DD")
 
 #-----------------------------------Admin Actions-----------------------------------#
 
