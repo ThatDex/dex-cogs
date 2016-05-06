@@ -163,15 +163,15 @@ class gcalender:
 
 	async def events_range(self, start_date, end_date):
 
-		    try:
-		        datetime.datetime.strptime(start_date, '%Y-%m-%d')
-		    except ValueError:
+			try:
+				datetime.datetime.strptime(start_date, '%Y-%m-%d')
+			except ValueError:
 				await self.bot.say("Use the format YYYY-MM-DD.")
 				return
 
-		    try:
-		        datetime.datetime.strptime(end_date, '%Y-%m-%d')
-		    except ValueError:
+			try:
+				datetime.datetime.strptime(end_date, '%Y-%m-%d')
+			except ValueError:
 				await self.bot.say("Use the format YYYY-MM-DD.")
 				return
 
