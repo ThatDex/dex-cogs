@@ -309,13 +309,13 @@ class gcalender:
 		await self.events_next_week()
 
 	@gcalendar.command(pass_context=True, name="between")
-	async def gcalendar_range(self, start_date, end_date):
+	async def gcalendar_range(self, ctx, start_date, end_date):
 		"""Show events between two dates.
 
 		Date format: YYYY-MM-DD
 		"""
 
-		await self.events_range(start_date, end_date)
+		await self.events_range(ctx, start_date, end_date)
 
 #-----------------------------------Admin Actions-----------------------------------#
 
