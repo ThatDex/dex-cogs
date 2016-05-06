@@ -169,30 +169,31 @@ class gcalender:
 				await self.bot.say("The start of your range must be ***BEFORE***  the end date.")
 				return
 
-			startdate = start_date
-			enddate = end_date
-			start = str(startdate) + "T00:00:00Z"
-			end = str(enddate) + "T23:00:00Z"
-			credentials = get_creds()
-			http = credentials.authorize(httplib2.Http())
-			service = discovery.build('calendar', 'v3', http=http)
-			now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-			
-			eventsResult = service.events().list(
-				calendarId=self.settings['cal_id'], timeMin=start, timeMax=end, maxResults=50, singleEvents=True,
-				orderBy='startTime').execute()
-			events = eventsResult.get('items', [])
-			eventList = []
-			
-			if not events:
-				await self.bot.say("No upcoming events found for this week.")
+			elif start_date <= end_date:
+				startdate = start_date
+				enddate = end_date
+				start = str(startdate) + "T00:00:00Z"
+				end = str(enddate) + "T23:00:00Z"
+				credentials = get_creds()
+				http = credentials.authorize(httplib2.Http())
+				service = discovery.build('calendar', 'v3', http=http)
+				now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
 				
-			for event in events:
-				start = event['start'].get('dateTime', event['start'].get('date'))
-				ev_summary = event['summary']
-				eventList.append(start + " " + ev_summary)
+				eventsResult = service.events().list(
+					calendarId=self.settings['cal_id'], timeMin=start, timeMax=end, maxResults=50, singleEvents=True,
+					orderBy='startTime').execute()
+				events = eventsResult.get('items', [])
+				eventList = []
+				
+				if not events:
+					await self.bot.say("No upcoming events found for this week.")
+					
+				for event in events:
+					start = event['start'].get('dateTime', event['start'].get('date'))
+					ev_summary = event['summary']
+					eventList.append(start + " " + ev_summary)
 
-			await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
+				await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
 
 #-----------------------------------Admin Actions-----------------------------------#
 
