@@ -118,7 +118,6 @@ class gcalender:
 			credentials = get_creds()
 			http = credentials.authorize(httplib2.Http())
 			service = discovery.build('calendar', 'v3', http=http)
-			now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
 			
 			eventsResult = service.events().list(
 				calendarId=self.settings['cal_id'], timeMin=start0h, timeMax=end23h, maxResults=50, singleEvents=True,
@@ -145,7 +144,6 @@ class gcalender:
 			credentials = get_creds()
 			http = credentials.authorize(httplib2.Http())
 			service = discovery.build('calendar', 'v3', http=http)
-			now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
 			
 			eventsResult = service.events().list(
 				calendarId=self.settings['cal_id'], timeMin=start0h, timeMax=end23h, maxResults=50, singleEvents=True,
