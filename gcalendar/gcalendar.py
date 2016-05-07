@@ -65,7 +65,7 @@ class gcalender:
 				eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
 
 		await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
-			+ "├────────────┼──────────┼─────────┼────────────────────"
+			+ "├────────────┼──────────┼─────────┼──────────────────────────────"
 			+ "\n" + "\n".join(eventList) + "\n" + "```")
 
 	async def events_today(self):
@@ -99,7 +99,7 @@ class gcalender:
 				eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
 
 		await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
-			+ "├────────────┼──────────┼─────────┼────────────────────"
+			+ "├────────────┼──────────┼─────────┼──────────────────────────────"
 			+ "\n" + "\n".join(eventList) + "\n" + "```")
 
 	async def events_tomorrow(self):
@@ -133,7 +133,7 @@ class gcalender:
 				eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
 
 		await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
-			+ "├────────────┼──────────┼─────────┼────────────────────"
+			+ "├────────────┼──────────┼─────────┼──────────────────────────────"
 			+ "\n" + "\n".join(eventList) + "\n" + "```")
 
 	async def events_this_week(self):
@@ -168,7 +168,7 @@ class gcalender:
 				eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
 
 		await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
-			+ "├────────────┼──────────┼─────────┼────────────────────"
+			+ "├────────────┼──────────┼─────────┼──────────────────────────────"
 			+ "\n" + "\n".join(eventList) + "\n" + "```")
 
 	async def events_next_week(self):
@@ -203,7 +203,7 @@ class gcalender:
 				eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
 
 		await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
-			+ "├────────────┼──────────┼─────────┼────────────────────"
+			+ "├────────────┼──────────┼─────────┼──────────────────────────────"
 			+ "\n" + "\n".join(eventList) + "\n" + "```")
 
 	async def events_range(self, start_date, end_date):
@@ -256,7 +256,7 @@ class gcalender:
 					eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
 
 			await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
-				+ "├────────────┼──────────┼─────────┼────────────────────"
+				+ "├────────────┼──────────┼─────────┼──────────────────────────────"
 				+ "\n" + "\n".join(eventList) + "\n" + "```")
 			return
 
