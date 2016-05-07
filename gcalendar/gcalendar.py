@@ -283,14 +283,14 @@ class gcalender:
 						ev_summary = event['summary']
 						eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
 
-				if ((len(str(eventList))) - len(eventList)) < 1700:
+				if ((len(str(eventList))) - len(eventList)) < 1950:
 
 					await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
 						+ "├────────────┼──────────┼─────────┼──────────────────────────────"
 						+ "\n" + "\n".join(eventList) + "\n" + "```")
 					return
 
-				elif ((len(str(eventList))) - len(eventList)) > 1700:
+				elif ((len(str(eventList))) - len(eventList)) > 1950:
 
 					await self.bot.say(((len(str(eventList))) - len(eventList)))
 					await self.bot.say(len(str(eventList)))
