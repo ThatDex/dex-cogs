@@ -271,16 +271,19 @@ class gcalender:
 						ev_summary = event['summary']
 
 						if len(ev_summary) > 31:
-							ev_summary = str(ev_summary[0:31]) + str("... ")						
+							ev_format = str(ev_summary[0:31]) + str("... ")						
+						
+						elif len(ev_summary) < 31:
+							ev_format = ev_summary
 
 						if 'T' in start:
 							startformat = start.replace('T', ' │ ').replace('+', ' │ +')
 							ev_summary = event['summary']
-							eventList.append("│ " +startformat + "  │ " + ev_summary)
+							eventList.append("│ " +startformat + "  │ " + ev_format)
 							
 						if 'T' not in start:
 							ev_summary = event['summary']
-							eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
+							eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_format)
 
 					if ((len(str(eventList))) - len(eventList)) < 1950:
 						await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
