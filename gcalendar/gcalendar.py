@@ -54,10 +54,12 @@ class gcalender:
 			
 		for event in events:
 			start = event['start'].get('dateTime', event['start'].get('date'))
+
 			if 'T' in start:
 				startformat = start.replace('T', ' │ ').replace('+', ' │ +')
 				ev_summary = event['summary']
 				eventList.append("│ " +startformat + "  │ " + ev_summary)
+				
 			if 'T' not in start:
 				ev_summary = event['summary']
 				eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
@@ -86,10 +88,19 @@ class gcalender:
 
 		for event in events:
 			start = event['start'].get('dateTime', event['start'].get('date'))
-			ev_summary = event['summary']
-			eventList.append(start + " " + ev_summary)
 
-		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
+			if 'T' in start:
+				startformat = start.replace('T', ' │ ').replace('+', ' │ +')
+				ev_summary = event['summary']
+				eventList.append("│ " +startformat + "  │ " + ev_summary)
+				
+			if 'T' not in start:
+				ev_summary = event['summary']
+				eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
+
+		await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
+			+ "├────────────┼──────────┼─────────┼────────────────────"
+			+ "\n" + "\n".join(eventList) + "\n" + "```")
 
 	async def events_tomorrow(self):
 
@@ -111,10 +122,19 @@ class gcalender:
 
 		for event in events:
 			start = event['start'].get('dateTime', event['start'].get('date'))
-			ev_summary = event['summary']
-			eventList.append(start + " " + ev_summary)
 
-		await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
+			if 'T' in start:
+				startformat = start.replace('T', ' │ ').replace('+', ' │ +')
+				ev_summary = event['summary']
+				eventList.append("│ " +startformat + "  │ " + ev_summary)
+				
+			if 'T' not in start:
+				ev_summary = event['summary']
+				eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
+
+		await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
+			+ "├────────────┼──────────┼─────────┼────────────────────"
+			+ "\n" + "\n".join(eventList) + "\n" + "```")
 
 	async def events_this_week(self):
 
@@ -135,12 +155,21 @@ class gcalender:
 			if not events:
 				await self.bot.say("No upcoming events found for this week.")
 				
-			for event in events:
-				start = event['start'].get('dateTime', event['start'].get('date'))
-				ev_summary = event['summary']
-				eventList.append(start + " " + ev_summary)
+		for event in events:
+			start = event['start'].get('dateTime', event['start'].get('date'))
 
-			await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
+			if 'T' in start:
+				startformat = start.replace('T', ' │ ').replace('+', ' │ +')
+				ev_summary = event['summary']
+				eventList.append("│ " +startformat + "  │ " + ev_summary)
+				
+			if 'T' not in start:
+				ev_summary = event['summary']
+				eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
+
+		await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
+			+ "├────────────┼──────────┼─────────┼────────────────────"
+			+ "\n" + "\n".join(eventList) + "\n" + "```")
 
 	async def events_next_week(self):
 
@@ -161,12 +190,21 @@ class gcalender:
 			if not events:
 				await self.bot.say("No upcoming events found for this week.")
 				
-			for event in events:
-				start = event['start'].get('dateTime', event['start'].get('date'))
-				ev_summary = event['summary']
-				eventList.append(start + " " + ev_summary)
+		for event in events:
+			start = event['start'].get('dateTime', event['start'].get('date'))
 
-			await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
+			if 'T' in start:
+				startformat = start.replace('T', ' │ ').replace('+', ' │ +')
+				ev_summary = event['summary']
+				eventList.append("│ " +startformat + "  │ " + ev_summary)
+				
+			if 'T' not in start:
+				ev_summary = event['summary']
+				eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
+
+		await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
+			+ "├────────────┼──────────┼─────────┼────────────────────"
+			+ "\n" + "\n".join(eventList) + "\n" + "```")
 
 	async def events_range(self, start_date, end_date):
 
@@ -204,13 +242,22 @@ class gcalender:
 				
 				if not events:
 					await self.bot.say("No upcoming events found for this week.")
-					
+							
 				for event in events:
 					start = event['start'].get('dateTime', event['start'].get('date'))
-					ev_summary = event['summary']
-					eventList.append(start + " " + ev_summary)
 
-				await self.bot.say("```" + "\n" + "\n".join(eventList) + "\n" + "```")
+					if 'T' in start:
+						startformat = start.replace('T', ' │ ').replace('+', ' │ +')
+						ev_summary = event['summary']
+						eventList.append("│ " +startformat + "  │ " + ev_summary)
+						
+					if 'T' not in start:
+						ev_summary = event['summary']
+						eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
+
+				await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
+					+ "├────────────┼──────────┼─────────┼────────────────────"
+					+ "\n" + "\n".join(eventList) + "\n" + "```")
 				return
 
 #-----------------------------------Admin Actions-----------------------------------#
