@@ -57,7 +57,7 @@ class gcalender:
 				start = event['start'].get('dateTime', event['start'].get('date'))
 				ev_summary = event['summary']
 
-				if len(ev_format) > 31:
+				if len(ev_summary) > 31:
 					ev_format = str(ev_format[0:31]) + str("...")
 						
 				elif len(ev_summary) < 31:
@@ -111,7 +111,7 @@ class gcalender:
 				start = event['start'].get('dateTime', event['start'].get('date'))
 				ev_summary = event['summary']
 
-				if len(ev_format) > 31:
+				if len(ev_summary) > 31:
 					ev_format = str(ev_format[0:31]) + str("...")
 						
 				elif len(ev_summary) < 31:
@@ -165,7 +165,7 @@ class gcalender:
 				start = event['start'].get('dateTime', event['start'].get('date'))
 				ev_summary = event['summary']
 
-				if len(ev_format) > 31:
+				if len(ev_summary) > 31:
 					ev_format = str(ev_format[0:31]) + str("... ")
 						
 				elif len(ev_summary) < 31:
