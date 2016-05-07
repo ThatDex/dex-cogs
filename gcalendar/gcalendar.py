@@ -54,7 +54,7 @@ class gcalender:
 			
 		for event in events:
 			start = event['start'].get('dateTime', event['start'].get('date'))
-			startformat = start.replace('T', ' | T').replace('+', ' | +')
+			startformat = start.replace('T', ' │ T').replace('+', ' │ +')
 			ev_summary = event['summary']
 			eventList.append("│ " +startformat + " │ " + ev_summary)
 
