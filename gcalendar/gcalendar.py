@@ -4,6 +4,7 @@ import os
 import datetime
 import json
 from __main__ import send_cmd_help
+from .utils.dataIO import fileIO
 
 #-------Google Calendar Imports-------#
 from apiclient import discovery
@@ -13,7 +14,6 @@ from cogs.utils import checks
 from cogs.utils.dataIO import fileIO
 from oauth2client import client
 from oauth2client import tools
-from .utils.dataIO import fileIO
 
 try:
 	import argparse
