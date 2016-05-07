@@ -271,10 +271,7 @@ class gcalender:
 						ev_summary = event['summary']
 
 						if len(ev_summary) > 31:
-							ev_format = str(ev_summary[0:31]) + str("... ")						
-						
-						elif len(ev_summary) < 31:
-							ev_format = ev_summary
+							ev_summary = str(ev_summary[0:31]) + str("... ")						
 
 						if 'T' in start:
 							startformat = start.replace('T', ' │ ').replace('+', ' │ +')
