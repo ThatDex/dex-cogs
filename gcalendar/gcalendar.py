@@ -61,6 +61,7 @@ class gcalender:
 					startformat = start.replace('T', ' │ ').replace('+', ' │ +')
 					ev_summary = event['summary']
 					eventList.append("│ " +startformat + "  │ " + ev_summary)
+					eventList.append("├────────────┼──────────┼─────────┼──────────────────────────────")
 					
 				if 'T' not in start:
 					ev_summary = event['summary']
@@ -69,6 +70,7 @@ class gcalender:
 			await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
 				+ "├────────────┼──────────┼─────────┼──────────────────────────────"
 				+ "\n" + "\n".join(eventList) + "\n" + "```")
+
 	async def events_today(self):
 
 		todaydate = datetime.date.today()
@@ -342,6 +344,8 @@ class gcalender:
 			self.settings['cal_id'] = calendar_ID
 			fileIO("data/gcalendar/settings.json", "save", self.settings)
 			await self.bot.say("Active calendar is now set to: " + self.settings['cal_id'])
+
+#-----------------------------------Sub Command Setup-----------------------------------#
 
 	@commands.group(no_pm=True, pass_context=True)
 	async def gcalendar(self, ctx):
