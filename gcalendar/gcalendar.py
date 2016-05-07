@@ -60,7 +60,7 @@ class gcalender:
 				eventList.append("│ " +startformat + " │ " + ev_summary)
 			if 'T' not in start:
 				ev_summary = event['summary']
-				eventList.append("│ " +start + " │" + "                   │" + ev_summary)
+				eventList.append("│ " +start + " │" + "                   │ " + ev_summary)
 
 		await self.bot.say("```" + "\n" + "| Date       | Time     | UTC    | Event" + "\n" 
 			+ "├────────────┼──────────┼────────┼────────────────────"
