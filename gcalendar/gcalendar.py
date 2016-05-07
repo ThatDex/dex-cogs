@@ -138,23 +138,23 @@ class gcalender:
 
 	async def events_this_week(self):
 
-			startdate = datetime.date.today() - datetime.timedelta(datetime.datetime.today().weekday())
-			enddate = startdate + datetime.timedelta(days=6)
-			start0h = str(startdate) + "T00:00:00Z"
-			end23h = str(enddate) + "T23:59:59Z"
-			credentials = get_creds()
-			http = credentials.authorize(httplib2.Http())
-			service = discovery.build('calendar', 'v3', http=http)
+		startdate = datetime.date.today() - datetime.timedelta(datetime.datetime.today().weekday())
+		enddate = startdate + datetime.timedelta(days=6)
+		start0h = str(startdate) + "T00:00:00Z"
+		end23h = str(enddate) + "T23:59:59Z"
+		credentials = get_creds()
+		http = credentials.authorize(httplib2.Http())
+		service = discovery.build('calendar', 'v3', http=http)
+		
+		eventsResult = service.events().list(
+			calendarId=self.settings['cal_id'], timeMin=start0h, timeMax=end23h, maxResults=50, singleEvents=True,
+			orderBy='startTime').execute()
+		events = eventsResult.get('items', [])
+		eventList = []
+		
+		if not events:
+			await self.bot.say("No upcoming events found for this week.")
 			
-			eventsResult = service.events().list(
-				calendarId=self.settings['cal_id'], timeMin=start0h, timeMax=end23h, maxResults=50, singleEvents=True,
-				orderBy='startTime').execute()
-			events = eventsResult.get('items', [])
-			eventList = []
-			
-			if not events:
-				await self.bot.say("No upcoming events found for this week.")
-				
 		for event in events:
 			start = event['start'].get('dateTime', event['start'].get('date'))
 
@@ -173,23 +173,23 @@ class gcalender:
 
 	async def events_next_week(self):
 
-			startdate = (datetime.date.today() - datetime.timedelta(datetime.datetime.today().weekday())) + datetime.timedelta(days=7)
-			enddate = startdate + datetime.timedelta(days=6)
-			start0h = str(startdate) + "T00:00:00Z"
-			end23h = str(enddate) + "T23:59:59Z"
-			credentials = get_creds()
-			http = credentials.authorize(httplib2.Http())
-			service = discovery.build('calendar', 'v3', http=http)
+		startdate = (datetime.date.today() - datetime.timedelta(datetime.datetime.today().weekday())) + datetime.timedelta(days=7)
+		enddate = startdate + datetime.timedelta(days=6)
+		start0h = str(startdate) + "T00:00:00Z"
+		end23h = str(enddate) + "T23:59:59Z"
+		credentials = get_creds()
+		http = credentials.authorize(httplib2.Http())
+		service = discovery.build('calendar', 'v3', http=http)
+		
+		eventsResult = service.events().list(
+			calendarId=self.settings['cal_id'], timeMin=start0h, timeMax=end23h, maxResults=50, singleEvents=True,
+			orderBy='startTime').execute()
+		events = eventsResult.get('items', [])
+		eventList = []
+		
+		if not events:
+			await self.bot.say("No upcoming events found for this week.")
 			
-			eventsResult = service.events().list(
-				calendarId=self.settings['cal_id'], timeMin=start0h, timeMax=end23h, maxResults=50, singleEvents=True,
-				orderBy='startTime').execute()
-			events = eventsResult.get('items', [])
-			eventList = []
-			
-			if not events:
-				await self.bot.say("No upcoming events found for this week.")
-				
 		for event in events:
 			start = event['start'].get('dateTime', event['start'].get('date'))
 
@@ -197,7 +197,7 @@ class gcalender:
 				startformat = start.replace('T', ' │ ').replace('+', ' │ +')
 				ev_summary = event['summary']
 				eventList.append("│ " +startformat + "  │ " + ev_summary)
-				
+
 			if 'T' not in start:
 				ev_summary = event['summary']
 				eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
@@ -208,57 +208,57 @@ class gcalender:
 
 	async def events_range(self, start_date, end_date):
 
-			try:
-				datetime.datetime.strptime(start_date, '%Y-%m-%d')
-			except ValueError:
-				await self.bot.say("Use the format YYYY-MM-DD.")
-				return
+		try:
+			datetime.datetime.strptime(start_date, '%Y-%m-%d')
+		except ValueError:
+			await self.bot.say("Use the format YYYY-MM-DD.")
+			return
 
-			try:
-				datetime.datetime.strptime(end_date, '%Y-%m-%d')
-			except ValueError:
-				await self.bot.say("Use the format YYYY-MM-DD.")
-				return
+		try:
+			datetime.datetime.strptime(end_date, '%Y-%m-%d')
+		except ValueError:
+			await self.bot.say("Use the format YYYY-MM-DD.")
+			return
 
-			if start_date > end_date:
-				await self.bot.say("The start of your range must be ***BEFORE***  the end date.")
-				return
+		if start_date > end_date:
+			await self.bot.say("The start of your range must be ***BEFORE***  the end date.")
+			return
 
-			elif start_date <= end_date:
-				startdate = start_date
-				enddate = end_date
-				start = str(startdate) + "T00:00:00Z"
-				end = str(enddate) + "T23:00:00Z"
-				credentials = get_creds()
-				http = credentials.authorize(httplib2.Http())
-				service = discovery.build('calendar', 'v3', http=http)
-				now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-				
-				eventsResult = service.events().list(
-					calendarId=self.settings['cal_id'], timeMin=start, timeMax=end, maxResults=50, singleEvents=True,
-					orderBy='startTime').execute()
-				events = eventsResult.get('items', [])
-				eventList = []
-				
-				if not events:
-					await self.bot.say("No upcoming events found for this week.")
-							
-				for event in events:
-					start = event['start'].get('dateTime', event['start'].get('date'))
-
-					if 'T' in start:
-						startformat = start.replace('T', ' │ ').replace('+', ' │ +')
-						ev_summary = event['summary']
-						eventList.append("│ " +startformat + "  │ " + ev_summary)
+		elif start_date <= end_date:
+			startdate = start_date
+			enddate = end_date
+			start = str(startdate) + "T00:00:00Z"
+			end = str(enddate) + "T23:00:00Z"
+			credentials = get_creds()
+			http = credentials.authorize(httplib2.Http())
+			service = discovery.build('calendar', 'v3', http=http)
+			now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+			
+			eventsResult = service.events().list(
+				calendarId=self.settings['cal_id'], timeMin=start, timeMax=end, maxResults=50, singleEvents=True,
+				orderBy='startTime').execute()
+			events = eventsResult.get('items', [])
+			eventList = []
+			
+			if not events:
+				await self.bot.say("No upcoming events found for this week.")
 						
-					if 'T' not in start:
-						ev_summary = event['summary']
-						eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
+			for event in events:
+				start = event['start'].get('dateTime', event['start'].get('date'))
 
-				await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
-					+ "├────────────┼──────────┼─────────┼────────────────────"
-					+ "\n" + "\n".join(eventList) + "\n" + "```")
-				return
+				if 'T' in start:
+					startformat = start.replace('T', ' │ ').replace('+', ' │ +')
+					ev_summary = event['summary']
+					eventList.append("│ " +startformat + "  │ " + ev_summary)
+					
+				if 'T' not in start:
+					ev_summary = event['summary']
+					eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
+
+			await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
+				+ "├────────────┼──────────┼─────────┼────────────────────"
+				+ "\n" + "\n".join(eventList) + "\n" + "```")
+			return
 
 #-----------------------------------Admin Actions-----------------------------------#
 
@@ -275,6 +275,7 @@ class gcalender:
 			calendar_list = service.calendarList().list(pageToken=page_token).execute()
 			calList = []
 			calIDList = []
+
 			for calendar_list_entry in calendar_list['items']:
 				cal_names = calendar_list_entry['summary']
 				cal_ids = calendar_list_entry['id']
@@ -288,6 +289,7 @@ class gcalender:
 							"You can also use [p]gcalendar setcal primary to use the default calendar" + "\n" + "```")
 					
 			page_token = calendar_list.get('nextPageToken')
+			
 			if not page_token:
 				break
 
