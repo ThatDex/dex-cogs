@@ -54,9 +54,13 @@ class gcalender:
 			
 		for event in events:
 			start = event['start'].get('dateTime', event['start'].get('date'))
-			startformat = start.replace('T', ' │ ').replace('+', ' │ +')
-			ev_summary = event['summary']
-			eventList.append("│ " +startformat + " │ " + ev_summary)
+			if 'T' in start:
+				startformat = start.replace('T', ' │ ').replace('+', ' │ +')
+				ev_summary = event['summary']
+				eventList.append("│ " +startformat + " │ " + ev_summary)
+			if 'T' not in start:
+				ev_summary = event['summary']
+				eventList.append("│ " +start + " │" + "               │" + ev_summary)
 
 		await self.bot.say("```" + "\n" + "| Date       | Time     | UTC    | Event" + "\n" 
 			+ "├────────────┼──────────┼────────┼────────────────────"
