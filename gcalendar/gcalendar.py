@@ -271,7 +271,7 @@ class gcalender:
 						ev_summary = event['summary']
 
 						if len(ev_summary) > 31:
-							ev_format = str(ev_summary[0:31]) + str("... ")						
+							ev_format = str(ev_summary[0:31]) + str("...")						
 						
 						elif len(ev_summary) < 31:
 							ev_format = ev_summary
@@ -287,7 +287,7 @@ class gcalender:
 
 					if ((len(str(eventList))) - len(eventList)) < 1950:
 						await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
-							+ "├────────────┼──────────┼─────────┼──────────────────────────────"
+							+ "├────────────┼──────────┼─────────┼────────────────────────────────────"
 							+ "\n" + "\n".join(eventList) + "\n" + "```")
 						return
 
