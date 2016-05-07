@@ -56,18 +56,21 @@ class gcalender:
 					
 			for event in events:
 				start = event['start'].get('dateTime', event['start'].get('date'))
+				ev_summary = event['summary']
+				ev_format = "{:<35}".format(ev_summary)
+
+				if len(ev_format) > 31:
+					ev_format = str(ev_format[0:31]) + str("...")
 
 				if 'T' in start:
+
 					startformat = start.replace('T', ' │ ').replace('+', ' │ +')
-					ev_summary = event['summary']
-					ev_format = "{:<35}".format(ev_summary)
-					eventList.append("│ " +startformat + "  │ " + ev_format + " │")
+					eventList.append("│ " + startformat + "  │ " + ev_format + " │")
 					eventList.append("├────────────┼──────────┼─────────┼─────────────────────────────────────┤")
 					
 				if 'T' not in start:
-					ev_summary = event['summary']
-					ev_format = "{:<35}".format(ev_summary)
-					eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_format + " │")
+
+					eventList.append("│ " + start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_format + " │")
 					eventList.append("├────────────┼──────────┼─────────┼─────────────────────────────────────┤")
 
 			await self.bot.say("```" 
@@ -271,45 +274,33 @@ class gcalender:
 			
 			elif events:
 						
-				for event in events:
-					start = event['start'].get('dateTime', event['start'].get('date'))
-
-					if 'T' in start:
-						startformat = start.replace('T', ' │ ').replace('+', ' │ +')
+					for event in events:
+						start = event['start'].get('dateTime', event['start'].get('date'))
 						ev_summary = event['summary']
 						ev_format = "{:<35}".format(ev_summary)
-						eventList.append("│ " +startformat + "  │ " + ev_format + " │")
-						eventList.append("├────────────┼──────────┼─────────┼─────────────────────────────────────┤")
-						
-					if 'T' not in start:
-						ev_summary = event['summary']
-						ev_format = "{:<35}".format(ev_summary)
-						eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_format + " │")
-						eventList.append("├────────────┼──────────┼─────────┼─────────────────────────────────────┤")
 
-				if ((len(str(eventList))) - len(eventList)) < 1950:
+						if len(ev_format) > 31:
+							ev_format = str(ev_format[0:31]) + str("...")
 
-					await self.bot.say("```" 
-						+ "\n" 
-						+ "┌────────────┬──────────┬─────────┬─────────────────────────────────────┐"
-						+ "\n" 
-						+ "| Date       | Time     | UTC     | Event                               |" 
-						+ "\n" 
-						+ "├────────────┼──────────┼─────────┼─────────────────────────────────────┤"
-						+ "\n" 
-						+ "\n".join(eventList) 
-						+ "\n" 
-						+ "| Date       | Time     | UTC     | Event                               |" 
-						+ "\n"
-						+ "└────────────┴──────────┴─────────┴─────────────────────────────────────┘" 
-						+ "\n" 
-						+ "```")
+							if 'T' in start:
+								startformat = start.replace('T', ' │ ').replace('+', ' │ +')
+								ev_summary = event['summary']
+								eventList.append("│ " +startformat + "  │ " + ev_summary)
+								
+							if 'T' not in start:
+								ev_summary = event['summary']
+								eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
 
-				elif ((len(str(eventList))) - len(eventList)) > 1950:
+					if ((len(str(eventList))) - len(eventList)) < 1950:
 
-					await self.bot.say(((len(str(eventList))) - len(eventList))) 
-					await self.bot.say(len(str(eventList))) 
-					await self.bot.say("Returned too many results please use a shorter range.")
+						await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
+							+ "├────────────┼──────────┼─────────┼──────────────────────────────"
+							+ "\n" + "\n".join(eventList) + "\n" + "```")
+						return
+
+					elif ((len(str(eventList))) - len(eventList)) > 1950:
+
+						await self.bot.say("Returned too many results please use a shorter range.")
 
 #-----------------------------------Admin Actions-----------------------------------#
 
