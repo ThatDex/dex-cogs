@@ -56,14 +56,13 @@ class gcalender:
 			for event in events:
 				start = event['start'].get('dateTime', event['start'].get('date'))
 				ev_summary = event['summary']
-				ev_format = "{:<35}".format(ev_summary)
 
 				if len(ev_format) > 31:
 					ev_format = str(ev_format[0:31]) + str("...")
 						
 				elif len(ev_summary) < 31:
-					ev_format = ev_summary
-							
+				ev_format = "{:<35}".format(ev_summary)
+
 				if 'T' in start:
 					startformat = start.replace('T', ' │ ').replace('+', ' │ +')
 					eventList.append("│ " + startformat + "  │ " + ev_format + " │")
@@ -111,13 +110,12 @@ class gcalender:
 			for event in events:
 				start = event['start'].get('dateTime', event['start'].get('date'))
 				ev_summary = event['summary']
-				ev_format = "{:<35}".format(ev_summary)
 
 				if len(ev_format) > 31:
 					ev_format = str(ev_format[0:31]) + str("...")
 						
 				elif len(ev_summary) < 31:
-					ev_format = ev_summary
+				ev_format = "{:<35}".format(ev_summary)
 							
 				if 'T' in start:
 					startformat = start.replace('T', ' │ ').replace('+', ' │ +')
@@ -166,13 +164,12 @@ class gcalender:
 			for event in events:
 				start = event['start'].get('dateTime', event['start'].get('date'))
 				ev_summary = event['summary']
-				ev_format = "{:<35}".format(ev_summary)
 
 				if len(ev_format) > 31:
-					ev_format = str(ev_format[0:31]) + str("...")
+					ev_format = str(ev_format[0:31]) + str("... ")
 						
 				elif len(ev_summary) < 31:
-					ev_format = ev_summary
+				ev_format = "{:<35}".format(ev_summary)
 							
 				if 'T' in start:
 					startformat = start.replace('T', ' │ ').replace('+', ' │ +')
