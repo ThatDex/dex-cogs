@@ -52,8 +52,7 @@ class gcalender:
 		if not events:
 			await self.bot.say("No upcoming events found.")
 			
-		elif events:
-					
+		elif events:	
 			for event in events:
 				start = event['start'].get('dateTime', event['start'].get('date'))
 				ev_summary = event['summary']
@@ -63,13 +62,11 @@ class gcalender:
 					ev_format = str(ev_format[0:31]) + str("...")
 
 				if 'T' in start:
-
 					startformat = start.replace('T', ' │ ').replace('+', ' │ +')
 					eventList.append("│ " + startformat + "  │ " + ev_format + " │")
 					eventList.append("├────────────┼──────────┼─────────┼─────────────────────────────────────┤")
 					
 				if 'T' not in start:
-
 					eventList.append("│ " + start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_format + " │")
 					eventList.append("├────────────┼──────────┼─────────┼─────────────────────────────────────┤")
 
@@ -107,8 +104,7 @@ class gcalender:
 		if not events:
 			await self.bot.say("No events found for today.")
 			
-		elif events:
-					
+		elif events:	
 			for event in events:
 				start = event['start'].get('dateTime', event['start'].get('date'))
 
@@ -143,8 +139,7 @@ class gcalender:
 		if not events:
 			await self.bot.say("No events found for tomorrow.")
 			
-		elif events:
-					
+		elif events:	
 			for event in events:
 				start = event['start'].get('dateTime', event['start'].get('date'))
 
@@ -180,8 +175,7 @@ class gcalender:
 		if not events:
 			await self.bot.say("No upcoming events found for this week.")
 			
-		elif events:
-					
+		elif events:	
 			for event in events:
 				start = event['start'].get('dateTime', event['start'].get('date'))
 
@@ -217,8 +211,7 @@ class gcalender:
 		if not events:
 			await self.bot.say("No upcoming events found for this week.")
 			
-		elif events:
-					
+		elif events:		
 			for event in events:
 				start = event['start'].get('dateTime', event['start'].get('date'))
 
@@ -272,34 +265,33 @@ class gcalender:
 			if not events:
 				await self.bot.say("No upcoming events found for this week.")
 			
-			elif events:
-						
+			elif events:	
 					for event in events:
 						start = event['start'].get('dateTime', event['start'].get('date'))
 						ev_summary = event['summary']
-						ev_format = "{:<35}".format(ev_summary)
 
-						if len(ev_format) > 31:
-							ev_format = str(ev_format[0:31]) + str("...")
+						if len(ev_summary) > 31:
+							ev_format = str(ev_summary[0:31]) + str("... ")						
+						
+						elif len(ev_summary) < 31:
+							ev_format = "{:<35}".format(ev_summary)
 
-							if 'T' in start:
-								startformat = start.replace('T', ' │ ').replace('+', ' │ +')
-								ev_summary = event['summary']
-								eventList.append("│ " +startformat + "  │ " + ev_summary)
-								
-							if 'T' not in start:
-								ev_summary = event['summary']
-								eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
+						if 'T' in start:
+							startformat = start.replace('T', ' │ ').replace('+', ' │ +')
+							ev_summary = event['summary']
+							eventList.append("│ " +startformat + "  │ " + ev_summary)
+							
+						if 'T' not in start:
+							ev_summary = event['summary']
+							eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
 
 					if ((len(str(eventList))) - len(eventList)) < 1950:
-
 						await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
 							+ "├────────────┼──────────┼─────────┼──────────────────────────────"
 							+ "\n" + "\n".join(eventList) + "\n" + "```")
 						return
 
 					elif ((len(str(eventList))) - len(eventList)) > 1950:
-
 						await self.bot.say("Returned too many results please use a shorter range.")
 
 #-----------------------------------Admin Actions-----------------------------------#
