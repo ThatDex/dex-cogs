@@ -70,6 +70,8 @@ class gcalender:
 					eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_format + " │")
 					eventList.append("├────────────┼──────────┼─────────┼─────────────────────────────────────┤")
 
+			length = len(eventList)
+			await self.bot.say(str(length))
 			await self.bot.say("```" 
 				+ "\n" 
 				+ "┌────────────┬──────────┬─────────┬─────────────────────────────────────┐"
