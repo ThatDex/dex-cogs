@@ -277,23 +277,36 @@ class gcalender:
 					if 'T' in start:
 						startformat = start.replace('T', ' │ ').replace('+', ' │ +')
 						ev_summary = event['summary']
-						eventList.append("│ " +startformat + "  │ " + ev_summary)
+						ev_format = "{:<35}".format(ev_summary)
+						eventList.append("│ " +startformat + "  │ " + ev_format + " │")
+						eventList.append("├────────────┼──────────┼─────────┼─────────────────────────────────────┤")
 						
 					if 'T' not in start:
 						ev_summary = event['summary']
-						eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
+						ev_format = "{:<35}".format(ev_summary)
+						eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_format + " │")
+						eventList.append("├────────────┼──────────┼─────────┼─────────────────────────────────────┤")
 
 				if ((len(str(eventList))) - len(eventList)) < 1950:
 
-					await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
-						+ "├────────────┼──────────┼─────────┼──────────────────────────────"
-						+ "\n" + "\n".join(eventList) + "\n" + "```")
-					return
+					await self.bot.say("```" 
+						+ "\n" 
+						+ "┌────────────┬──────────┬─────────┬─────────────────────────────────────┐"
+						+ "\n" 
+						+ "| Date       | Time     | UTC     | Event                               |" 
+						+ "\n" 
+						+ "├────────────┼──────────┼─────────┼─────────────────────────────────────┤"
+						+ "\n" 
+						+ "\n".join(eventList) 
+						+ "\n" 
+						+ "| Date       | Time     | UTC     | Event                               |" 
+						+ "\n"
+						+ "└────────────┴──────────┴─────────┴─────────────────────────────────────┘" 
+						+ "\n" 
+						+ "```")
 
 				elif ((len(str(eventList))) - len(eventList)) > 1950:
 
-					await self.bot.say(((len(str(eventList))) - len(eventList)))
-					await self.bot.say(len(str(eventList)))
 					await self.bot.say("Returned too many results please use a shorter range.")
 
 #-----------------------------------Admin Actions-----------------------------------#
