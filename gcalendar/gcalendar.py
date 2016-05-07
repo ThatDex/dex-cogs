@@ -283,10 +283,16 @@ class gcalender:
 						ev_summary = event['summary']
 						eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
 
-				await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
-					+ "├────────────┼──────────┼─────────┼──────────────────────────────"
-					+ "\n" + "\n".join(eventList) + "\n" + "```")
-				return
+				if (len(str(eventList))) - len(eventList) < 1700:
+
+					await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
+						+ "├────────────┼──────────┼─────────┼──────────────────────────────"
+						+ "\n" + "\n".join(eventList) + "\n" + "```")
+					return
+
+				elif (len(str(eventList))) - len(eventList) < 1700:
+					
+					await self.bot.say("Returned too many results please use a shorter range.")
 
 #-----------------------------------Admin Actions-----------------------------------#
 
