@@ -307,6 +307,8 @@ class gcalender:
 
 				elif ((len(str(eventList))) - len(eventList)) > 1950:
 
+					await self.bot.say(((len(str(eventList))) - len(eventList))) 
+					await self.bot.say(len(str(eventList))) 
 					await self.bot.say("Returned too many results please use a shorter range.")
 
 #-----------------------------------Admin Actions-----------------------------------#
