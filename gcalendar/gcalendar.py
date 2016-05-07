@@ -60,7 +60,10 @@ class gcalender:
 
 				if len(ev_format) > 31:
 					ev_format = str(ev_format[0:31]) + str("...")
-
+						
+				elif len(ev_summary) < 31:
+					ev_format = ev_summary
+							
 				if 'T' in start:
 					startformat = start.replace('T', ' │ ').replace('+', ' │ +')
 					eventList.append("│ " + startformat + "  │ " + ev_format + " │")
@@ -107,19 +110,39 @@ class gcalender:
 		elif events:	
 			for event in events:
 				start = event['start'].get('dateTime', event['start'].get('date'))
+				ev_summary = event['summary']
+				ev_format = "{:<35}".format(ev_summary)
 
+				if len(ev_format) > 31:
+					ev_format = str(ev_format[0:31]) + str("...")
+						
+				elif len(ev_summary) < 31:
+					ev_format = ev_summary
+							
 				if 'T' in start:
 					startformat = start.replace('T', ' │ ').replace('+', ' │ +')
-					ev_summary = event['summary']
-					eventList.append("│ " +startformat + "  │ " + ev_summary)
+					eventList.append("│ " + startformat + "  │ " + ev_format + " │")
+					eventList.append("├────────────┼──────────┼─────────┼─────────────────────────────────────┤")
 					
 				if 'T' not in start:
-					ev_summary = event['summary']
-					eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
+					eventList.append("│ " + start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_format + " │")
+					eventList.append("├────────────┼──────────┼─────────┼─────────────────────────────────────┤")
 
-			await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
-				+ "├────────────┼──────────┼─────────┼──────────────────────────────"
-				+ "\n" + "\n".join(eventList) + "\n" + "```")
+			await self.bot.say("```" 
+				+ "\n" 
+				+ "┌────────────┬──────────┬─────────┬─────────────────────────────────────┐"
+				+ "\n" 
+				+ "| Date       | Time     | UTC     | Event                               |" 
+				+ "\n" 
+				+ "├────────────┼──────────┼─────────┼─────────────────────────────────────┤"
+				+ "\n" 
+				+ "\n".join(eventList) 
+				+ "\n" 
+				+ "| Date       | Time     | UTC     | Event                               |" 
+				+ "\n"
+				+ "└────────────┴──────────┴─────────┴─────────────────────────────────────┘" 
+				+ "\n" 
+				+ "```")
 
 	async def events_tomorrow(self):
 
@@ -142,19 +165,39 @@ class gcalender:
 		elif events:	
 			for event in events:
 				start = event['start'].get('dateTime', event['start'].get('date'))
+				ev_summary = event['summary']
+				ev_format = "{:<35}".format(ev_summary)
 
+				if len(ev_format) > 31:
+					ev_format = str(ev_format[0:31]) + str("...")
+						
+				elif len(ev_summary) < 31:
+					ev_format = ev_summary
+							
 				if 'T' in start:
 					startformat = start.replace('T', ' │ ').replace('+', ' │ +')
-					ev_summary = event['summary']
-					eventList.append("│ " +startformat + "  │ " + ev_summary)
+					eventList.append("│ " + startformat + "  │ " + ev_format + " │")
+					eventList.append("├────────────┼──────────┼─────────┼─────────────────────────────────────┤")
 					
 				if 'T' not in start:
-					ev_summary = event['summary']
-					eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
+					eventList.append("│ " + start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_format + " │")
+					eventList.append("├────────────┼──────────┼─────────┼─────────────────────────────────────┤")
 
-			await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
-				+ "├────────────┼──────────┼─────────┼──────────────────────────────"
-				+ "\n" + "\n".join(eventList) + "\n" + "```")
+			await self.bot.say("```" 
+				+ "\n" 
+				+ "┌────────────┬──────────┬─────────┬─────────────────────────────────────┐"
+				+ "\n" 
+				+ "| Date       | Time     | UTC     | Event                               |" 
+				+ "\n" 
+				+ "├────────────┼──────────┼─────────┼─────────────────────────────────────┤"
+				+ "\n" 
+				+ "\n".join(eventList) 
+				+ "\n" 
+				+ "| Date       | Time     | UTC     | Event                               |" 
+				+ "\n"
+				+ "└────────────┴──────────┴─────────┴─────────────────────────────────────┘" 
+				+ "\n" 
+				+ "```")
 
 	async def events_this_week(self):
 
@@ -176,22 +219,33 @@ class gcalender:
 			await self.bot.say("No upcoming events found for this week.")
 			
 		elif events:	
-			for event in events:
-				start = event['start'].get('dateTime', event['start'].get('date'))
-
-				if 'T' in start:
-					startformat = start.replace('T', ' │ ').replace('+', ' │ +')
+				for event in events:
+					start = event['start'].get('dateTime', event['start'].get('date'))
 					ev_summary = event['summary']
-					eventList.append("│ " +startformat + "  │ " + ev_summary)
+
+					if len(ev_summary) > 31:
+						ev_format = str(ev_summary[0:31]) + str("...")						
 					
-				if 'T' not in start:
-					ev_summary = event['summary']
-					eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
+					elif len(ev_summary) < 31:
+						ev_format = ev_summary
 
-			await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
-				+ "├────────────┼──────────┼─────────┼──────────────────────────────"
-				+ "\n" + "\n".join(eventList) + "\n" + "```")
+					if 'T' in start:
+						startformat = start.replace('T', ' │ ').replace('+', ' │ +')
+						ev_summary = event['summary']
+						eventList.append("│ " +startformat + "  │ " + ev_format)
+						
+					if 'T' not in start:
+						ev_summary = event['summary']
+						eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_format)
 
+				if ((len(str(eventList))) - len(eventList)) < 1950:
+					await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
+						+ "├────────────┼──────────┼─────────┼────────────────────────────────────"
+						+ "\n" + "\n".join(eventList) + "\n" + "```")
+					return
+
+				elif ((len(str(eventList))) - len(eventList)) > 1950:
+					await self.bot.say("Returned too many results please use a shorter range.")
 	async def events_next_week(self):
 
 		startdate = (datetime.date.today() - datetime.timedelta(datetime.datetime.today().weekday())) + datetime.timedelta(days=7)
@@ -211,22 +265,34 @@ class gcalender:
 		if not events:
 			await self.bot.say("No upcoming events found for this week.")
 			
-		elif events:		
-			for event in events:
-				start = event['start'].get('dateTime', event['start'].get('date'))
-
-				if 'T' in start:
-					startformat = start.replace('T', ' │ ').replace('+', ' │ +')
+		elif events:	
+				for event in events:
+					start = event['start'].get('dateTime', event['start'].get('date'))
 					ev_summary = event['summary']
-					eventList.append("│ " +startformat + "  │ " + ev_summary)
+
+					if len(ev_summary) > 31:
+						ev_format = str(ev_summary[0:31]) + str("...")						
 					
-				if 'T' not in start:
-					ev_summary = event['summary']
-					eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
+					elif len(ev_summary) < 31:
+						ev_format = ev_summary
 
-			await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
-				+ "├────────────┼──────────┼─────────┼──────────────────────────────"
-				+ "\n" + "\n".join(eventList) + "\n" + "```")
+					if 'T' in start:
+						startformat = start.replace('T', ' │ ').replace('+', ' │ +')
+						ev_summary = event['summary']
+						eventList.append("│ " +startformat + "  │ " + ev_format)
+						
+					if 'T' not in start:
+						ev_summary = event['summary']
+						eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_format)
+
+				if ((len(str(eventList))) - len(eventList)) < 1950:
+					await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
+						+ "├────────────┼──────────┼─────────┼────────────────────────────────────"
+						+ "\n" + "\n".join(eventList) + "\n" + "```")
+					return
+
+				elif ((len(str(eventList))) - len(eventList)) > 1950:
+					await self.bot.say("Returned too many results please use a shorter range.")
 
 	async def events_range(self, start_date, end_date):
 
