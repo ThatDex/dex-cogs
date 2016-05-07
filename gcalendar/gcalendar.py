@@ -57,12 +57,12 @@ class gcalender:
 			if 'T' in start:
 				startformat = start.replace('T', ' │ ').replace('+', ' │ +')
 				ev_summary = event['summary']
-				eventList.append("│ " +startformat + " │ " + ev_summary)
+				eventList.append("│ " +startformat + "  │ " + ev_summary)
 			if 'T' not in start:
 				ev_summary = event['summary']
 				eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
 
-		await self.bot.say("```" + "\n" + "| Date       | Time     | UTC    | Event" + "\n" 
+		await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
 			+ "├────────────┼──────────┼────────┼────────────────────"
 			+ "\n" + "\n".join(eventList) + "\n" + "```")
 
