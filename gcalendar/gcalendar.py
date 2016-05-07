@@ -65,7 +65,8 @@ class gcalender:
 					
 				if 'T' not in start:
 					ev_summary = event['summary']
-					eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
+					ev_format = "{:<35}".format(ev_summary)
+					eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_format + " │")
 					eventList.append("├────────────┼──────────┼─────────┼──────────────────────────────")
 
 			await self.bot.say("```" 
