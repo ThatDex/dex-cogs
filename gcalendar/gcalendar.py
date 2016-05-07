@@ -58,8 +58,8 @@ class gcalender:
 			ev_summary = event['summary']
 			eventList.append("│ " +startformat + " │ " + ev_summary)
 
-		await self.bot.say("```" + "\n" + "| Date       | Time      | UTC    | Event" + "\n" 
-			+ "├────────────┼───────────┼────────┼────────────────────"
+		await self.bot.say("```" + "\n" + "| Date       | Time     | UTC    | Event" + "\n" 
+			+ "├────────────┼──────────┼────────┼────────────────────"
 			+ "\n" + "\n".join(eventList) + "\n" + "```")
 
 	async def events_today(self):
