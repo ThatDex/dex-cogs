@@ -284,7 +284,8 @@ class gcalender:
 					if 'T' not in start:
 						ev_summary = event['summary']
 						eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_summary)
-
+				length = len(eventList)
+				await self.bot.say(str(length))
 				await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
 					+ "├────────────┼──────────┼─────────┼──────────────────────────────"
 					+ "\n" + "\n".join(eventList) + "\n" + "```")
