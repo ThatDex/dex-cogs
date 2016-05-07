@@ -56,7 +56,7 @@ class gcalender:
 			start = event['start'].get('dateTime', event['start'].get('date'))
 			startformat = start.replace('T', ' | T').replace('+', ' | +')
 			ev_summary = event['summary']
-			eventList.append("| " +start + " | " + ev_summary)
+			eventList.append("| " +startformat + " | " + ev_summary)
 
 		await self.bot.say("```" + "\n" + "| Date       | Time     | UTC    | Event" + "\n" 
 			+ "├────────────┼──────────┼────────┼────────────────────"
