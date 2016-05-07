@@ -60,7 +60,8 @@ class gcalender:
 				if 'T' in start:
 					startformat = start.replace('T', ' │ ').replace('+', ' │ +')
 					ev_summary = event['summary']
-					eventList.append("│ " +startformat + "  │ " + ev_summary + " │")
+					ev_format = "{:<35}".format(ev_summary)
+					eventList.append("│ " +startformat + "  │ " + ev_format + " │")
 					eventList.append("├────────────┼──────────┼─────────┼─────────────────────────────────────┤")
 					
 				if 'T' not in start:
