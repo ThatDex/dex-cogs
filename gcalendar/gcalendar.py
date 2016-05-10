@@ -204,6 +204,8 @@ class gcalender:
 						eventList.append("│ " + start + " │ ALL-DAY  │ ALL-DAY │ " + ev_format)
 						formatted = True
 
+					formatted = False
+
 				if ((len(str(eventList))) - len(eventList)) < 1950:
 					await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
 						+ "├────────────┼──────────┼─────────┼────────────────────────────────────"
