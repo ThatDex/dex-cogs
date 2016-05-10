@@ -103,13 +103,13 @@ class gcalender:
 	async def events_this_week(self):
 
 		time_min = datetime.date.today() - datetime.timedelta(datetime.datetime.today().weekday())
-		time_max = startdate + datetime.timedelta(days=6)
+		time_max = time_min + datetime.timedelta(days=6)
 		await self.print_events(time_min, time_max)
 
 	async def events_next_week(self):
 
 		time_min = (datetime.date.today() - datetime.timedelta(datetime.datetime.today().weekday())) + datetime.timedelta(days=7)
-		time_max = startdate + datetime.timedelta(days=6)
+		time_max = time_min + datetime.timedelta(days=6)
 		await self.print_events(time_min, time_max)
 
 	async def events_range(self, start_date, end_date):
