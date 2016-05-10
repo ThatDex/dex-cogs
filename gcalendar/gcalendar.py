@@ -190,13 +190,15 @@ class gcalender:
 						startformat = start.replace('T', ' │ ').replace('+', ' │ +')
 						ev_summary = event['summary']
 						eventList.append("│ " +startformat + "  │ " + ev_format)
-
-					if 'Z' in start:
+					
+					if '+' not in start:
 						startformat = start.replace('T', ' │ ').replace('Z', ' │ ALL-DAY │ ')
-						
+						ev_summary = event['summary']
+						eventList.append("│ " +startformat + "  │ " + ev_format)
+
 					if 'T' not in start:
 						ev_summary = event['summary']
-						eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_format)
+						eventList.append("│ " +start + " │ ALL-DAY  │ ALL-DAY │ " + ev_format)
 
 				if ((len(str(eventList))) - len(eventList)) < 1950:
 					await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
