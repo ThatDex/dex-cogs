@@ -90,166 +90,26 @@ class gcalender:
 
 	async def events_today(self):
 
-		todaydate = datetime.date.today()
-		today0h = str(todaydate) + "T00:00:00Z"
-		today23h = str(todaydate) +  "T23:59:59Z"
-		credentials = get_creds()
-		http = credentials.authorize(httplib2.Http())
-		service = discovery.build('calendar', 'v3', http=http)
-
-		eventsResult = service.events().list(
-			calendarId=self.settings['cal_id'], timeMin=today0h, timeMax=today23h, maxResults=50, singleEvents=True,
-			orderBy='startTime').execute()
-		events = eventsResult.get('items', [])
-		eventList = []
-		
-		if not events:
-			await self.bot.say("No events found for today.")
-			
-		elif events:	
-			for event in events:
-				start = event['start'].get('dateTime', event['start'].get('date'))
-				ev_summary = event['summary']
-
-				if len(ev_summary) > 31:
-					ev_format = str(ev_format[0:31]) + str("...")
-						
-				elif len(ev_summary) < 31:
-					ev_format = "{:<35}".format(ev_summary)
-							
-				if 'T' in start:
-					startformat = start.replace('T', ' │ ').replace('+', ' │ +')
-					eventList.append("│ " + startformat + "  │ " + ev_format + " │")
-					eventList.append("├────────────┼──────────┼─────────┼─────────────────────────────────────┤")
-					
-				if 'T' not in start:
-					eventList.append("│ " + start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_format + " │")
-					eventList.append("├────────────┼──────────┼─────────┼─────────────────────────────────────┤")
-
-			await self.bot.say("```" 
-				+ "\n" 
-				+ "┌────────────┬──────────┬─────────┬─────────────────────────────────────┐"
-				+ "\n" 
-				+ "| Date       | Time     | UTC     | Event                               |" 
-				+ "\n" 
-				+ "├────────────┼──────────┼─────────┼─────────────────────────────────────┤"
-				+ "\n" 
-				+ "\n".join(eventList) 
-				+ "\n" 
-				+ "| Date       | Time     | UTC     | Event                               |" 
-				+ "\n"
-				+ "└────────────┴──────────┴─────────┴─────────────────────────────────────┘" 
-				+ "\n" 
-				+ "```")
+		time_min = datetime.date.today()
+		time_max = time_min
+		await self.print_events(time_min, time_max)
 
 	async def events_tomorrow(self):
 
-		tomorrowdate = datetime.date.today() + datetime.timedelta(days=1)
-		tomorrow0h = str(tomorrowdate) + "T00:00:00Z"
-		tomorrow23h = str(tomorrowdate) +  "T23:59:59Z"
-		credentials = get_creds()
-		http = credentials.authorize(httplib2.Http())
-		service = discovery.build('calendar', 'v3', http=http)
-
-		eventsResult = service.events().list(
-			calendarId=self.settings['cal_id'], timeMin=tomorrow0h, timeMax=tomorrow23h, maxResults=50, singleEvents=True,
-			orderBy='startTime').execute()
-		events = eventsResult.get('items', [])
-		eventList = []
-		
-		if not events:
-			await self.bot.say("No events found for tomorrow.")
-			
-		elif events:	
-			for event in events:
-				start = event['start'].get('dateTime', event['start'].get('date'))
-				ev_summary = event['summary']
-
-				if len(ev_summary) > 31:
-					ev_format = str(ev_format[0:31]) + str("... ")
-						
-				elif len(ev_summary) < 31:
-					ev_format = "{:<35}".format(ev_summary)
-							
-				if 'T' in start:
-					startformat = start.replace('T', ' │ ').replace('+', ' │ +')
-					eventList.append("│ " + startformat + "  │ " + ev_format + " │")
-					eventList.append("├────────────┼──────────┼─────────┼─────────────────────────────────────┤")
-					
-				if 'T' not in start:
-					eventList.append("│ " + start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_format + " │")
-					eventList.append("├────────────┼──────────┼─────────┼─────────────────────────────────────┤")
-
-			await self.bot.say("```" 
-				+ "\n" 
-				+ "┌────────────┬──────────┬─────────┬─────────────────────────────────────┐"
-				+ "\n" 
-				+ "| Date       | Time     | UTC     | Event                               |" 
-				+ "\n" 
-				+ "├────────────┼──────────┼─────────┼─────────────────────────────────────┤"
-				+ "\n" 
-				+ "\n".join(eventList) 
-				+ "\n" 
-				+ "| Date       | Time     | UTC     | Event                               |" 
-				+ "\n"
-				+ "└────────────┴──────────┴─────────┴─────────────────────────────────────┘" 
-				+ "\n" 
-				+ "```")
+		time_min = datetime.date.today() + datetime.timedelta(days=1)
+		time_max = time_min
+		await self.print_events(time_min, time_max)
 
 	async def events_this_week(self):
 
-		startdate = datetime.date.today() - datetime.timedelta(datetime.datetime.today().weekday())
-		enddate = startdate + datetime.timedelta(days=6)
-		start0h = str(startdate) + "T00:00:00Z"
-		end23h = str(enddate) + "T23:59:59Z"
-		credentials = get_creds()
-		http = credentials.authorize(httplib2.Http())
-		service = discovery.build('calendar', 'v3', http=http)
-		
-		eventsResult = service.events().list(
-			calendarId=self.settings['cal_id'], timeMin=start0h, timeMax=end23h, maxResults=50, singleEvents=True,
-			orderBy='startTime').execute()
-		events = eventsResult.get('items', [])
-		eventList = []
-		
-		if not events:
-			await self.bot.say("No upcoming events found for this week.")
-			
-		elif events:	
-				for event in events:
-					start = event['start'].get('dateTime', event['start'].get('date'))
-					ev_summary = event['summary']
+		time_min = datetime.date.today() - datetime.timedelta(datetime.datetime.today().weekday())
+		time_max = startdate + datetime.timedelta(days=6)
+		await self.print_events(time_min, time_max)
 
-					if len(ev_summary) > 31:
-						ev_format = str(ev_summary[0:31]) + str("...")						
-					
-					elif len(ev_summary) < 31:
-						ev_format = ev_summary
-
-					if 'T' in start:
-						startformat = start.replace('T', ' │ ').replace('+', ' │ +')
-						ev_summary = event['summary']
-						eventList.append("│ " +startformat + "  │ " + ev_format)
-						
-					if 'T' not in start:
-						ev_summary = event['summary']
-						eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_format)
-
-				if ((len(str(eventList))) - len(eventList)) < 1950:
-					await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
-						+ "├────────────┼──────────┼─────────┼────────────────────────────────────"
-						+ "\n" + "\n".join(eventList) + "\n" + "```")
-					return
-
-				elif ((len(str(eventList))) - len(eventList)) > 1950:
-					await self.bot.say("Returned too many results please use a shorter range.")
 	async def events_next_week(self):
 
-		startdate = (datetime.date.today() - datetime.timedelta(datetime.datetime.today().weekday())) + datetime.timedelta(days=7)
-		enddate = startdate + datetime.timedelta(days=6)
-		time_min = str(startdate) + "T00:00:00Z"
-		time_max = str(enddate) + "T23:59:59Z"
-
+		time_min = (datetime.date.today() - datetime.timedelta(datetime.datetime.today().weekday())) + datetime.timedelta(days=7)
+		time_max = startdate + datetime.timedelta(days=6)
 		await self.print_events(time_min, time_max)
 
 	async def events_range(self, start_date, end_date):
@@ -266,57 +126,11 @@ class gcalender:
 			await self.bot.say("Use the format YYYY-MM-DD.")
 			return
 
-		if start_date > end_date:
-			await self.bot.say("The start of your range must be ***BEFORE***  the end date.")
-			return
-
 		elif start_date <= end_date:
-			startdate = start_date
-			enddate = end_date
-			start = str(startdate) + "T00:00:00Z"
-			end = str(enddate) + "T23:00:00Z"
-			credentials = get_creds()
-			http = credentials.authorize(httplib2.Http())
-			service = discovery.build('calendar', 'v3', http=http)
-			now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-			
-			eventsResult = service.events().list(
-				calendarId=self.settings['cal_id'], timeMin=start, timeMax=end, maxResults=50, singleEvents=True,
-				orderBy='startTime').execute()
-			events = eventsResult.get('items', [])
-			eventList = []
-			
-			if not events:
-				await self.bot.say("No upcoming events found for this week.")
-			
-			elif events:	
-					for event in events:
-						start = event['start'].get('dateTime', event['start'].get('date'))
-						ev_summary = event['summary']
+			time_min = start_date
+			time_max = end_date
 
-						if len(ev_summary) > 31:
-							ev_format = str(ev_summary[0:31]) + str("...")						
-						
-						elif len(ev_summary) < 31:
-							ev_format = ev_summary
-
-						if 'T' in start:
-							startformat = start.replace('T', ' │ ').replace('+', ' │ +')
-							ev_summary = event['summary']
-							eventList.append("│ " +startformat + "  │ " + ev_format)
-							
-						if 'T' not in start:
-							ev_summary = event['summary']
-							eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_format)
-
-					if ((len(str(eventList))) - len(eventList)) < 1950:
-						await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
-							+ "├────────────┼──────────┼─────────┼────────────────────────────────────"
-							+ "\n" + "\n".join(eventList) + "\n" + "```")
-						return
-
-					elif ((len(str(eventList))) - len(eventList)) > 1950:
-						await self.bot.say("Returned too many results please use a shorter range.")
+			await self.print_events(time_min, time_max)
 
 #-----------------------------------Admin Actions-----------------------------------#
 
@@ -388,18 +202,26 @@ class gcalender:
 				
 			self.settings['cal_id'] = calendar_ID
 			fileIO("data/gcalendar/settings.json", "save", self.settings)
+
 			await self.bot.say("Active calendar is now set to: " + self.settings['cal_id'])
 
 #-----------------------------------Print Function-----------------------------------#
 
 	async def print_events(self, time_min, time_max):
 
+		if time_min > time_max:
+			await self.bot.say("The start of your range must be ***BEFORE***  the end date.")
+			return
+
+		start = str(time_min) + "T00:00:00Z"
+		end = str(time_max) + "T23:59:00Z"
+
 		credentials = get_creds()
 		http = credentials.authorize(httplib2.Http())
 		service = discovery.build('calendar', 'v3', http=http)
 		
 		eventsResult = service.events().list(
-			calendarId=self.settings['cal_id'], timeMin=time_min, timeMax=time_max, maxResults=50, singleEvents=True,
+			calendarId=self.settings['cal_id'], timeMin=start, timeMax=end, maxResults=50, singleEvents=True,
 			orderBy='startTime').execute()
 		events = eventsResult.get('items', [])
 		eventList = []
@@ -434,7 +256,7 @@ class gcalender:
 					return
 
 				elif ((len(str(eventList))) - len(eventList)) > 1950:
-					await self.bot.say("Returned too many results please use a shorter range.")
+					await self.bot.say("Returned too many results please use a shorter range or try [p]gcalendar between.")
 
 #-----------------------------------Sub Command Setup-----------------------------------#
 
@@ -514,10 +336,6 @@ class gcalender:
 
 def get_creds():
 	"""Gets valid user credentials from storage.
-
-	If nothing has been stored, or if the stored credentials are invalid,
-	the OAuth2 flow is completed to obtain the new credentials.
-
 	Returns:
 		Credentials, the obtained credential.
 	"""
@@ -530,9 +348,11 @@ def get_creds():
 
 	store = oauth2client.file.Storage(credential_path)
 	credentials = store.get()
+
 	if not credentials or credentials.invalid:
 		flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
 		flow.user_agent = self.settings['app_name']
+
 		if flags:
 			credentials = tools.run_flow(flow, store, flags)
 		else: # Needed only for compatibility with Python 2.6
