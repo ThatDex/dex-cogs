@@ -186,7 +186,7 @@ class gcalender:
 					elif len(ev_summary) < 31:
 						ev_format = ev_summary
 
-					if 'T' and '+' in start and:
+					if 'T' and '+' in start:
 						startformat = start.replace('T', ' │ ').replace('+', ' │ +')
 						ev_summary = event['summary']
 						eventList.append("│ " +startformat + "  │ " + ev_format)
