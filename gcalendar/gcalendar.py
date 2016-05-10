@@ -167,7 +167,7 @@ class gcalender:
 		service = discovery.build('calendar', 'v3', http=http)
 		
 		eventsResult = service.events().list(
-			calendarId=self.settings['cal_id'], timeMin=start, timeMax=end, maxResults=50, singleEvents=True,
+			calendarId=self.settings['cal_id'], timeMin=start, timeMax=end, maxResults=37, singleEvents=True,
 			orderBy='startTime').execute()
 		events = eventsResult.get('items', [])
 		eventList = []
