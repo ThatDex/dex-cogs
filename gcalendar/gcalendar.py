@@ -191,12 +191,12 @@ class gcalender:
 						ev_summary = event['summary']
 						eventList.append("│ " +startformat + "  │ " + ev_format)
 					
-					if 'T' and 'Z' in start:
+					elif 'T' and 'Z' in start:
 						startformat = start.replace('T', ' │ ').replace('Z', ' │ ALL-DAY │ ')
 						ev_summary = event['summary']
 						eventList.append("│ " +startformat + ev_format)
 
-					if 'T' and '+' not in start:
+					elif 'T' and '+' not in start:
 						ev_summary = event['summary']
 						eventList.append("│ " + start + " │ ALL-DAY  │ ALL-DAY │ " + ev_format)
 
