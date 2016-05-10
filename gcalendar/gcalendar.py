@@ -196,7 +196,7 @@ class gcalender:
 						ev_summary = event['summary']
 						eventList.append("│ " +startformat + "  │ " + ev_format)
 
-					if 'T' not in start:
+					if 'T' and '+' not in start:
 						ev_summary = event['summary']
 						eventList.append("│ " +start + " │ ALL-DAY  │ ALL-DAY │ " + ev_format)
 
