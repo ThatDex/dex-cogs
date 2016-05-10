@@ -159,6 +159,7 @@ class gcalender:
 			await self.bot.say("The start of your range must be ***BEFORE***  the end date.")
 			return
 
+		formatted = False
 		start = str(time_min) + "T00:00:00Z"
 		end = str(time_max) + "T23:59:00Z"
 
@@ -186,19 +187,22 @@ class gcalender:
 					elif len(ev_summary) < 31:
 						ev_format = ev_summary
 
-					if 'T' and '+' in start:
+					if 'T' and '+' in start and formatted == False:
 						startformat = start.replace('T', ' │ ').replace('+', ' │ +')
 						ev_summary = event['summary']
 						eventList.append("│ " +startformat + "  │ " + ev_format)
+						formatted = True
 					
-					elif 'T' and 'Z' in start:
+					if 'T' and 'Z' in start and formatted == False:
 						startformat = start.replace('T', ' │ ').replace('Z', ' │ ALL-DAY │ ')
 						ev_summary = event['summary']
 						eventList.append("│ " +startformat + "  │ " + ev_format)
+						formatted = True
 
-					elif 'T' and '+' not in start:
+					if 'T' and '+' not in start and formatted == False:
 						ev_summary = event['summary']
-						eventList.append("│ " +start + " │ ALL-DAY  │ ALL-DAY │ " + ev_format)
+						eventList.append("│ " + start + " │ ALL-DAY  │ ALL-DAY │ " + ev_format)
+						formatted = True
 
 				if ((len(str(eventList))) - len(eventList)) < 1950:
 					await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
