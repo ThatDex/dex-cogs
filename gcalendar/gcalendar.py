@@ -36,58 +36,6 @@ class gcalender:
 
 #-----------------------------------Event Listing-----------------------------------#
 
-	async def ten_apps(self):
-
-		credentials = get_creds()
-		http = credentials.authorize(httplib2.Http())
-		service = discovery.build('calendar', 'v3', http=http)
-		now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-		
-		eventsResult = service.events().list(
-			calendarId=self.settings['cal_id'], timeMin=now, maxResults=10, singleEvents=True,
-			orderBy='startTime').execute()
-		events = eventsResult.get('items', [])
-		eventList = []
-		
-		if not events:
-			await self.bot.say("No upcoming events found.")
-			
-		elif events:	
-			for event in events:
-				start = event['start'].get('dateTime', event['start'].get('date'))
-				ev_summary = event['summary']
-
-				if len(ev_summary) > 31:
-					ev_format = str(ev_format[0:31]) + str("...")
-						
-				elif len(ev_summary) < 31:
-					ev_format = "{:<35}".format(ev_summary)
-
-				if 'T' in start:
-					startformat = start.replace('T', ' │ ').replace('+', ' │ +')
-					eventList.append("│ " + startformat + "  │ " + ev_format + " │")
-					eventList.append("├────────────┼──────────┼─────────┼─────────────────────────────────────┤")
-					
-				if 'T' not in start:
-					eventList.append("│ " + start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_format + " │")
-					eventList.append("├────────────┼──────────┼─────────┼─────────────────────────────────────┤")
-
-			await self.bot.say("```" 
-				+ "\n" 
-				+ "┌────────────┬──────────┬─────────┬─────────────────────────────────────┐"
-				+ "\n" 
-				+ "| Date       | Time     | UTC     | Event                               |" 
-				+ "\n" 
-				+ "├────────────┼──────────┼─────────┼─────────────────────────────────────┤"
-				+ "\n" 
-				+ "\n".join(eventList) 
-				+ "\n" 
-				+ "| Date       | Time     | UTC     | Event                               |" 
-				+ "\n"
-				+ "└────────────┴──────────┴─────────┴─────────────────────────────────────┘" 
-				+ "\n" 
-				+ "```")
-
 	async def events_today(self):
 
 		time_min = datetime.date.today()
