@@ -34,52 +34,6 @@ class gcalender:
 		self.bot = bot
 		self.settings = fileIO("data/gcalendar/settings.json", "load")
 
-#-----------------------------------Print Function-----------------------------------#
-
-	async def print_events(self, time_min, time_max):
-
-		credentials = get_creds()
-		http = credentials.authorize(httplib2.Http())
-		service = discovery.build('calendar', 'v3', http=http)
-		
-		eventsResult = service.events().list(
-			calendarId=self.settings['cal_id'], timeMin=time_min, timeMax=time_max, maxResults=50, singleEvents=True,
-			orderBy='startTime').execute()
-		events = eventsResult.get('items', [])
-		eventList = []
-		
-		if not events:
-			await self.bot.say("No upcoming events found.")
-			
-		elif events:	
-				for event in events:
-					start = event['start'].get('dateTime', event['start'].get('date'))
-					ev_summary = event['summary']
-
-					if len(ev_summary) > 31:
-						ev_format = str(ev_summary[0:31]) + str("...")						
-					
-					elif len(ev_summary) < 31:
-						ev_format = ev_summary
-
-					if 'T' in start:
-						startformat = start.replace('T', ' │ ').replace('+', ' │ +')
-						ev_summary = event['summary']
-						eventList.append("│ " +startformat + "  │ " + ev_format)
-						
-					if 'T' not in start:
-						ev_summary = event['summary']
-						eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_format)
-
-				if ((len(str(eventList))) - len(eventList)) < 1950:
-					await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
-						+ "├────────────┼──────────┼─────────┼────────────────────────────────────"
-						+ "\n" + "\n".join(eventList) + "\n" + "```")
-					return
-
-				elif ((len(str(eventList))) - len(eventList)) > 1950:
-					await self.bot.say("Returned too many results please use a shorter range.")
-
 #-----------------------------------Event Listing-----------------------------------#
 
 	async def ten_apps(self):
@@ -296,7 +250,7 @@ class gcalender:
 		time_min = str(startdate) + "T00:00:00Z"
 		time_max = str(enddate) + "T23:59:59Z"
 
-		await print_events(self, time_min, time_max)
+		await self.print_events(self, time_min, time_max)
 
 	async def events_range(self, start_date, end_date):
 
@@ -435,6 +389,52 @@ class gcalender:
 			self.settings['cal_id'] = calendar_ID
 			fileIO("data/gcalendar/settings.json", "save", self.settings)
 			await self.bot.say("Active calendar is now set to: " + self.settings['cal_id'])
+
+#-----------------------------------Print Function-----------------------------------#
+
+	async def print_events(self, time_min, time_max):
+
+		credentials = get_creds()
+		http = credentials.authorize(httplib2.Http())
+		service = discovery.build('calendar', 'v3', http=http)
+		
+		eventsResult = service.events().list(
+			calendarId=self.settings['cal_id'], timeMin=time_min, timeMax=time_max, maxResults=50, singleEvents=True,
+			orderBy='startTime').execute()
+		events = eventsResult.get('items', [])
+		eventList = []
+		
+		if not events:
+			await self.bot.say("No upcoming events found.")
+			
+		elif events:	
+				for event in events:
+					start = event['start'].get('dateTime', event['start'].get('date'))
+					ev_summary = event['summary']
+
+					if len(ev_summary) > 31:
+						ev_format = str(ev_summary[0:31]) + str("...")						
+					
+					elif len(ev_summary) < 31:
+						ev_format = ev_summary
+
+					if 'T' in start:
+						startformat = start.replace('T', ' │ ').replace('+', ' │ +')
+						ev_summary = event['summary']
+						eventList.append("│ " +startformat + "  │ " + ev_format)
+						
+					if 'T' not in start:
+						ev_summary = event['summary']
+						eventList.append("│ " +start + " │" + " ALL-DAY  │ ALL-DAY │ " + ev_format)
+
+				if ((len(str(eventList))) - len(eventList)) < 1950:
+					await self.bot.say("```" + "\n" + "| Date       | Time     | UTC     | Event" + "\n" 
+						+ "├────────────┼──────────┼─────────┼────────────────────────────────────"
+						+ "\n" + "\n".join(eventList) + "\n" + "```")
+					return
+
+				elif ((len(str(eventList))) - len(eventList)) > 1950:
+					await self.bot.say("Returned too many results please use a shorter range.")
 
 #-----------------------------------Sub Command Setup-----------------------------------#
 
