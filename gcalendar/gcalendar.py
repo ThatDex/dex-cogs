@@ -126,11 +126,9 @@ class gcalender:
 			await self.bot.say("Use the format YYYY-MM-DD.")
 			return
 
-		if start_date <= end_date:
-			time_min = start_date
-			time_max = end_date
-
-			await self.print_events(time_min, time_max)
+		time_min = start_date
+		time_max = end_date
+		await self.print_events(time_min, time_max)
 
 #-----------------------------------Admin Actions-----------------------------------#
 
