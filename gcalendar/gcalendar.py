@@ -250,7 +250,7 @@ class gcalender:
 		time_min = str(startdate) + "T00:00:00Z"
 		time_max = str(enddate) + "T23:59:59Z"
 
-		await self.print_events(self, time_min, time_max)
+		await self.print_events(time_min, time_max)
 
 	async def events_range(self, start_date, end_date):
 
