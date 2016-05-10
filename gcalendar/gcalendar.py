@@ -187,7 +187,7 @@ class gcalender:
 						ev_format = ev_summary
 
 					if 'T' in start:
-						startformat = start.replace('T', ' │ ').replace('+', ' │ +')
+						startformat = start.replace('T', ' │ ').replace('+', ' │ +').replace('Z', '')
 						ev_summary = event['summary']
 						eventList.append("│ " +startformat + "  │ " + ev_format)
 						
