@@ -213,14 +213,7 @@ class gcalender:
 			return
 
 #-----------------------------------Event Listing-----------------------------------#
-	
-	@gcalendar.command(pass_context=True, name="tenapps")
-	async def gcalendar_tenapps(self):
-		"""Show the next 10 appointments
-		"""
 
-		await self.ten_apps()
-						
 	@gcalendar.command(pass_context=True, name="today")
 	async def gcalendar_eventstoday(self):
 		"""List events for today
